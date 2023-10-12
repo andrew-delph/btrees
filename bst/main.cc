@@ -4,7 +4,11 @@ using namespace std;
 
 int main()
 {
-    cout << "starting.\n";
+
+    Item *item = new Item;
+    item->key = "zz";
+    item->value = "xx";
+    cout << item->key << "starting.\n";
 
     BST tree;
 

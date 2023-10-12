@@ -4,23 +4,28 @@ using namespace std;
 
 void BST::put(string key, string value)
 {
+    Item *item = new Item;
+    item->key = key;
+    item->value = value;
     if (root == NULL)
     {
-        root = new Node(key, value);
+        root = new Node(item);
         return;
     }
 
     Node *temp = find(key);
-    temp->value = value;
+    temp->item = item;
 }
 
 string BST::get(string key)
 {
     Node *node = find(key);
     if (node == nullptr)
-
+    {
         return "";
-    return node->value;
+    }
+
+    return node->item->value;
 }
 
 Node *BST::find(string key)
@@ -29,25 +34,27 @@ Node *BST::find(string key)
     Node *temp = root;
     while (temp != NULL)
     {
-        if (temp->key == key)
+        if (temp->item->key == key)
         {
             break;
         }
-        else if (temp->key < key)
+        else if (temp->item->key < key)
         {
             if (temp->left == NULL)
             {
-                Node *next = new Node(key, "");
+                Item *item = new Item;
+                Node *next = new Node(item);
                 temp->left = next;
                 return next;
             }
             temp = temp->left;
         }
-        else if (temp->key > key)
+        else if (temp->item->key > key)
         {
             if (temp->right == NULL)
             {
-                Node *next = new Node(key, "");
+                Item *item = new Item;
+                Node *next = new Node(item);
                 temp->right = next;
                 return next;
             }

@@ -5,9 +5,8 @@
 using namespace std;
 #include "../bst.h"
 
-void test_add()
+void test_tree()
 {
-
     BST tree;
 
     tree.put("test1", "1");
@@ -24,6 +23,6 @@ void test_add()
 
 int main()
 {
-    test_add();
+    test_tree();
     return 0;
 }

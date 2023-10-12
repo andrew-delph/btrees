@@ -3,14 +3,19 @@
 using namespace std;
 #pragma once
 
+struct Item
+{
+    std::string key;
+    std::string value;
+};
+
 class Node
 {
 public:
-    Node(string key, string value) : key(key), value(value), left(nullptr), right(nullptr){};
+    Node(Item *item) : item(item), left(nullptr), right(nullptr){};
     Node *left;
     Node *right;
-    string key;
-    string value;
+    Item *item;
 };
 
 class BST
