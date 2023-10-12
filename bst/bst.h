@@ -22,4 +22,5 @@ public:
     BST() : root(nullptr) {}
     void put(string key, string value);
     string get(string key);
+    Node *find(string key);
 };
