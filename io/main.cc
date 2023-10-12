@@ -43,7 +43,7 @@ int writeMap(string filePath)
 {
     cout << "WRITING!\n";
     std::map<std::string, std::string> keyValuePairs = {
-        {"key1", "value12"},
+        {"key1", "value1z"},
         {"key2", "value2"},
         {"key3", "value3"}};
 
