@@ -4,10 +4,15 @@ using namespace std;
 
 void BST::put(string key, string value)
 {
-    cout << "key: " << key << "value: " << value << "\n";
+    root = new Node(key, value);
+    cout
+        << "key: " << key << " value: " << value << "\n";
 }
 
 string BST::get(string key)
 {
-    return "haha";
+
+    if (root == nullptr)
+        return "";
+    return root->value;
 }

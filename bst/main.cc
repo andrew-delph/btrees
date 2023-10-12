@@ -4,10 +4,11 @@ using namespace std;
 
 int main()
 {
+    cout << "starting.\n";
 
     BST tree;
 
-    tree.put("hello", "Test");
+    tree.put("helloz", "Test");
 
-    cout << "STARTING!\n";
+    cout << "get: " << tree.get("helloz");
 }
