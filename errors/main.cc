@@ -42,7 +42,9 @@ int main()
         cout << (p ? p.__cxa_exception_type()->name() : "null") << std::endl;
     }
 
-    cout << 1 / 0 << "starting.\n";
+    cout << 1 / 0 << "\n";
+
+    cout << "after\n";
 
     return 0;
 }
