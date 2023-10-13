@@ -77,6 +77,7 @@ void pre_order_helper(struct Node *node)
     {
         return;
     }
+    printf(" %s", node->key);
     pre_order_helper(node->left);
     pre_order_helper(node->right);
 }
@@ -250,8 +251,7 @@ int main()
 
     // printf("--------\n");
     in_order(tree);
-    // pre_order(tree);
-    // assert_data(tree, 'c');
+    pre_order(tree);
 
     printf("DONE.");
 
