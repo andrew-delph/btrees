@@ -179,6 +179,11 @@ int getTreeHeight(struct Cbst *tree)
     return getNodeHeight(tree->root);
 }
 
+int getBalance(struct Node *node)
+{
+    return getNodeHeight(node->left) - getNodeHeight(node->right);
+}
+
 #include <stdio.h>
 #include <signal.h>
 #include <stdlib.h>
@@ -240,6 +245,21 @@ int main()
     printf("get_item b = %s\n", get_item(tree, "b"));
 
     in_order(tree);
+
+    printf("balance: %d\n", getBalance(tree->root));
+    for (int i = 1; i <= 10; i++)
+    {
+        char *str = (char *)malloc(i + 1);
+        if (str == NULL)
+        {
+            printf("Memory allocation failed.\n");
+            return 1;
+        }
+        memset(str, 'c', i);
+        str[i] = '\0';
+        insert_item(tree, str, "extrac");
+    }
+    printf("balance: %d\n", getBalance(tree->root));
 
     printf("DONE.");
 
