@@ -1,4 +1,11 @@
+cc_library(
+    name = "deps",
+    srcs = glob(["*.c"]),
+    hdrs = glob(["*.h"]),
+)
+
 cc_binary(
     name = "cbst",
     srcs = ["cbst.c"],
+    deps = [":deps"],
 )

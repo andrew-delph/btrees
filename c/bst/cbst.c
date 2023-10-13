@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include "utils.h"
 
 struct Item
 {
@@ -192,6 +193,8 @@ int main()
     in_order(tree);
 
     printf("DONE.");
+
+    printf("min: %d, min %d\n", max(2, 5), max(2, 5));
 
     return 0;
 }
