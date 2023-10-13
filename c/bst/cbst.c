@@ -13,6 +13,8 @@ struct Node
     struct Node *left;
     struct Node *right;
     struct Item *item;
+    struct Node *parent;
+    int height;
 };
 
 struct Cbst
@@ -34,7 +36,7 @@ struct Item *create_item()
     return newItem;
 }
 
-struct Node *create_node()
+struct Node *create_node(struct Node *parent)
 {
     struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
     if (newNode == NULL)
@@ -46,6 +48,7 @@ struct Node *create_node()
     newNode->left = NULL;
     newNode->right = NULL;
     newNode->item = NULL; // Create a new Item for the node
+    newNode->parent = parent;
     return newNode;
 }
 
@@ -58,7 +61,7 @@ struct Cbst *create_tree()
         exit(1);
     }
 
-    newTree->root = create_node();
+    newTree->root = create_node(NULL);
     return newTree;
 }
 
@@ -69,13 +72,14 @@ struct Node *get_node(struct Cbst *tree, char key[])
     while (temp->item != NULL)
     {
         count++;
+        printf("height: %d\n", temp->height);
 
         int comp = strcmp(key, temp->item->key);
         if (comp > 0)
         {
             if (temp->right == NULL)
             {
-                temp->right = create_node();
+                temp->right = create_node(temp);
                 temp = temp->right;
                 break;
             }
@@ -85,7 +89,7 @@ struct Node *get_node(struct Cbst *tree, char key[])
         {
             if (temp->left == NULL)
             {
-                temp->left = create_node();
+                temp->left = create_node(temp);
                 temp = temp->left;
                 break;
             }
@@ -106,6 +110,7 @@ void insert_item(struct Cbst *tree, char key[], char value[])
     temp->item = create_item();
     temp->item->key = key;
     temp->item->value = value;
+    updateHeight(temp);
 }
 
 char *get_item(struct Cbst *tree, char key[])
@@ -136,6 +141,27 @@ void in_order_helper(struct Node *node)
     in_order_helper(node->left);
     printf(" %s", node->item->key);
     in_order_helper(node->right);
+}
+
+void updateHeight(struct Node *node)
+
+{
+    if (node == NULL)
+    {
+        return;
+    }
+    int leftHeight = 0;
+    int rightHeight = 0;
+    if (node->left != NULL)
+    {
+        leftHeight = node->left->height + 1;
+    }
+    if (node->right != NULL)
+    {
+        rightHeight = node->right->height + 1;
+    }
+    node->height = max(leftHeight, rightHeight);
+    updateHeight(node->parent);
 }
 
 #include <stdio.h>
