@@ -164,10 +164,19 @@ void updateHeight(struct Node *node)
     updateHeight(node->parent);
 }
 
-int getHeight(struct Cbst *tree)
+int getNodeHeight(struct Node *node)
+{
+    if (node == NULL)
+    {
+        return 0;
+    }
+    return node->height;
+}
+
+int getTreeHeight(struct Cbst *tree)
 
 {
-    return tree->root->height;
+    return getNodeHeight(tree->root);
 }
 
 #include <stdio.h>
@@ -189,17 +198,17 @@ int main()
     printf("get_item test = %s\n", get_item(&tree, "test"));
 
     insert_item(tree, "b", "its b");
-    printf("tree height = %d\n", getHeight(tree));
+    printf("tree height = %d\n", getTreeHeight(tree));
     printf("inserted b\n");
     printf("get_item b = %s\n", get_item(tree, "b"));
     printf("get_item b = %s\n", get_item(tree, "b"));
-    printf("tree height = %d\n", getHeight(tree));
+    printf("tree height = %d\n", getTreeHeight(tree));
 
     insert_item(tree, "c", "its c");
     printf("get_item b = %s\n", get_item(tree, "b"));
     printf("get_item b = %s\n", get_item(tree, "b"));
 
-    printf("tree height = %d\n", getHeight(tree));
+    printf("tree height = %d\n", getTreeHeight(tree));
 
     insert_item(tree, "a", "its a");
     printf("get_item b = %s\n", get_item(tree, "b"));
@@ -211,12 +220,12 @@ int main()
     insert_item(tree, "aaaa", "its a4");
     printf("get_item b = %s\n", get_item(tree, "b"));
     insert_item(tree, "aaaaa", "its a5");
-    printf("tree height = %d\n", getHeight(tree));
+    printf("tree height = %d\n", getTreeHeight(tree));
 
     printf("get_item b = %s\n", get_item(tree, "b"));
     insert_item(tree, "aaaaaa", "its a6");
 
-    printf("tree height = %d\n", getHeight(tree));
+    printf("tree height = %d\n", getTreeHeight(tree));
 
     insert_item(tree, "bb", "its b2");
     insert_item(tree, "ccc", "its c3");
