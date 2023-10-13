@@ -51,7 +51,7 @@ int main()
 
     cout << "4 " << tree.get("test4") << std::endl;
 
-    for (int i = 0; i < 100000; ++i)
+    for (int i = 0; i < 100; ++i)
     {
         string key = generateRandomString(5);
         string value = generateRandomString(5);

@@ -3,9 +3,18 @@ cc_library(
     srcs = glob(["*.cc"]),
     hdrs = glob(["*.h"]),
 )
+
 cc_binary(
     name = "main",
     srcs = ["main.cc"],
+    deps = [
+        ":deps",
+    ],
+)
+
+cc_binary(
+    name = "hello",
+    srcs = ["hello.c"],
     deps = [
         ":deps",
     ],
