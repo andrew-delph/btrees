@@ -219,40 +219,37 @@ void segfault_handler(int signal_num)
     printf("Caught segmentation fault! Exiting...\n");
     exit(1);
 }
-
-int main()
+void insert_data(struct Cbst *tree)
 {
-    signal(SIGSEGV, segfault_handler);
-
-    struct Cbst *tree = create_tree();
-
     insert_item(tree, "b", "its b");
-
-    assert(get_item(tree, "b") == "its b");
-    assert(get_item(tree, "b") == "its b");
-
-    insert_item(tree, "c", "its c");
-    assert(get_item(tree, "b") == "its b");
-    assert(get_item(tree, "b") == "its b");
-
     insert_item(tree, "a", "its a");
-
     insert_item(tree, "aa", "its a2");
-    assert(get_item(tree, "b") == "its b");
     insert_item(tree, "aaa", "its a3");
     insert_item(tree, "aaaa", "its a4");
     insert_item(tree, "aaaaa", "its a5");
+    insert_item(tree, "c", "its c");
+}
 
+void assert_data(struct Cbst *tree)
+{
+    assert(get_item(tree, "b") == "its b");
+    assert(get_item(tree, "b") == "its b");
     assert(get_item(tree, "a") == "its a");
     assert(get_item(tree, "aa") == "its a2");
     assert(get_item(tree, "aaa") == "its a3");
     assert(get_item(tree, "aaaa") == "its a4");
     assert(get_item(tree, "aaaaa") == "its a5");
     assert(get_item(tree, "b") == "its b");
+}
+int main()
+{
+    signal(SIGSEGV, segfault_handler);
 
-    insert_item(tree, "bb", "its b2");
-    insert_item(tree, "ccc", "its c3");
-    insert_item(tree, "aaaaaaa", "its a7");
+    struct Cbst *tree = create_tree();
+
+    insert_data(tree);
+
+    assert_data(tree);
 
     in_order(tree);
 
@@ -271,7 +268,7 @@ int main()
     }
     printf("balance: %d\n", getBalance(tree->root));
 
-    assert(5 == 5);
+    assert_data(tree);
     printf("DONE.");
 
     printf("min: %d, min %d\n", max(2, 5), max(2, 5));
