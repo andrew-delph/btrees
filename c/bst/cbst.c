@@ -255,7 +255,7 @@ int main()
     in_order(tree);
     pre_order(tree);
 
-    printf("DONE.");
+    printf("DONE.\n");
 
     return 0;
 }
