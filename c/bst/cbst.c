@@ -86,9 +86,6 @@ int main()
     printf("get_item = %s\n", get_item(&tree, "test"));
 
     insert_item(tree, "insert_key", "insert_value");
-    // printf("inserted %s\n", tree->root->item->value);
-
-    // printf("manual %s\n", tree->root->item->value);
 
     printf("get_item = %s\n", get_item(tree, "test"));
 
