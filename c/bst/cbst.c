@@ -57,24 +57,12 @@ struct Cbst *create_tree()
         exit(1);
     }
 
-    newTree->root = NULL;
+    newTree->root = create_node();
     return newTree;
 }
 
 void insert_item(struct Cbst *tree, char key[], char value[])
 {
-    if (tree->root == NULL)
-    {
-        printf("root null.\n");
-        struct Node *node = create_node();
-        tree->root = node;
-
-        node->item = create_item();
-        tree->root->item->key = key;
-        tree->root->item->value = value;
-        return;
-    }
-
     struct Node *temp = tree->root;
 
     int count = 0;
