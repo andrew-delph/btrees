@@ -105,14 +105,15 @@ struct Node *get_node(struct Cbst *tree, char key[])
     return temp;
 }
 
-void insert_item(struct Cbst *tree, char key[], char value[])
+struct Node *insert_item(struct Cbst *tree, char key[], char value[])
 {
     struct Node *temp = get_node(tree, key);
     temp->item = create_item();
     temp->item->key = key;
     temp->item->value = value;
     updateHeight(temp);
-    balanceNode(temp);
+    // balanceNode(tree, temp);
+    return temp;
 }
 
 char *get_item(struct Cbst *tree, char key[])
@@ -145,8 +146,25 @@ void in_order_helper(struct Node *node)
     in_order_helper(node->right);
 }
 
-void updateHeight(struct Node *node)
+void pre_order(struct Cbst *tree)
+{
+    printf("pre_order:");
+    pre_order_helper(tree->root);
+    printf("\n");
+}
 
+void pre_order_helper(struct Node *node)
+{
+    if (node == NULL || node->item == NULL)
+    {
+        return;
+    }
+    printf(" %s-[%d]", node->item->key, getBalance(node), getNodeHeight(node));
+    pre_order_helper(node->left);
+    pre_order_helper(node->right);
+}
+
+void updateHeight(struct Node *node)
 {
     if (node == NULL)
     {
@@ -186,28 +204,64 @@ int getBalance(struct Node *node)
     return getNodeHeight(node->left) - getNodeHeight(node->right);
 }
 
-int balanceNode(struct Node *node)
+struct Node *leftRotate(struct Node *node)
 {
+    printf("left balance %d\n", getBalance(node));
+    struct Node *r = node->right;
+    r->left = node;
+    r->parent = node->parent;
+    node->right = NULL;
+    node->parent = r;
+    updateHeight(node);
+    return r;
+}
+
+struct Node *rightRotate(struct Node *node)
+{
+    printf("right balance %d\n", getBalance(node));
+    struct Node *left = node->left;
+    left->right = node;
+    left->parent = node->parent;
+    node->parent = left;
+    node->left = NULL;
+    updateHeight(node);
+    return left;
+}
+
+void balanceNode(struct Cbst *tree, struct Node *node)
+{
+    if (node == NULL)
+    {
+        return;
+    }
+
+    int isRoot = tree->root == node;
     int balance = getBalance(node);
+    if (balance > 1 || balance < -1)
+    {
+        printf("k = %s b = %d h = %d\n", node->item->key, balance, node->height);
+    }
     if (balance > 1)
     {
-        printf("balance %d\n", balance);
+        struct Node *r = rightRotate(node);
+        if (isRoot)
+        {
+            printf("MOVED ROOT\n");
+            tree->root = r;
+        }
     }
     else if (balance < -1)
     {
-        printf("balance %d\n", balance);
+        struct Node *l = leftRotate(node);
+        if (isRoot)
+        {
+            printf("MOVED ROOT\n");
+            tree->root = l;
+        }
     }
-    return 1;
-}
 
-int rightRotate(struct Node *node)
-{
-    return 1;
-}
-
-int leftRotate(struct Node *node)
-{
-    return 1;
+    balanceNode(tree, node->parent);
+    // balanceNode(tree, node->right);
 }
 
 #include <stdio.h>
@@ -219,42 +273,12 @@ void segfault_handler(int signal_num)
     printf("Caught segmentation fault! Exiting...\n");
     exit(1);
 }
+
+int dataNum = 5;
 void insert_data(struct Cbst *tree)
 {
-    insert_item(tree, "b", "its b");
-    insert_item(tree, "a", "its a");
-    insert_item(tree, "aa", "its a2");
-    insert_item(tree, "aaa", "its a3");
-    insert_item(tree, "aaaa", "its a4");
-    insert_item(tree, "aaaaa", "its a5");
-    insert_item(tree, "c", "its c");
-}
 
-void assert_data(struct Cbst *tree)
-{
-    assert(get_item(tree, "b") == "its b");
-    assert(get_item(tree, "b") == "its b");
-    assert(get_item(tree, "a") == "its a");
-    assert(get_item(tree, "aa") == "its a2");
-    assert(get_item(tree, "aaa") == "its a3");
-    assert(get_item(tree, "aaaa") == "its a4");
-    assert(get_item(tree, "aaaaa") == "its a5");
-    assert(get_item(tree, "b") == "its b");
-}
-int main()
-{
-    signal(SIGSEGV, segfault_handler);
-
-    struct Cbst *tree = create_tree();
-
-    insert_data(tree);
-
-    assert_data(tree);
-
-    in_order(tree);
-
-    printf("balance: %d\n", getBalance(tree->root));
-    for (int i = 1; i <= 10; i++)
+    for (int i = 1; i <= dataNum; i++)
     {
         char *str = (char *)malloc(i + 1);
         if (str == NULL)
@@ -264,14 +288,47 @@ int main()
         }
         memset(str, 'c', i);
         str[i] = '\0';
-        insert_item(tree, str, "extrac");
+        insert_item(tree, str, str);
     }
-    printf("balance: %d\n", getBalance(tree->root));
+}
+
+void assert_data(struct Cbst *tree)
+{
+    for (int i = 1; i <= dataNum; i++)
+    {
+        char *str = (char *)malloc(i + 1);
+        if (str == NULL)
+        {
+            printf("Memory allocation failed.\n");
+            return 1;
+        }
+        memset(str, 'c', i);
+        str[i] = '\0';
+        char *get = get_item(tree, str);
+        assert(strcmp(get, str) == 0);
+    }
+}
+int main()
+{
+    signal(SIGSEGV, segfault_handler);
+
+    struct Cbst *tree = create_tree();
+
+    insert_data(tree);
+
+    // insert_item(tree, "b", "x");
+    // printf("--------\n");
+    // insert_item(tree, "b", "x");
+
+    printf("--------\n");
+    in_order(tree);
+    pre_order(tree);
 
     assert_data(tree);
-    printf("DONE.");
+    // insert_data(tree);
+    // assert_data(tree);
 
-    printf("min: %d, min %d\n", max(2, 5), max(2, 5));
+    printf("DONE.");
 
     return 0;
 }
