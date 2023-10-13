@@ -66,6 +66,42 @@ struct Cbst *create_tree()
     return newTree;
 }
 
+void in_order(struct Cbst *tree)
+{
+    printf("in_order:");
+    in_order_helper(tree->root);
+    printf("\n");
+}
+
+void in_order_helper(struct Node *node)
+{
+    if (node == NULL || node->item == NULL)
+    {
+        return;
+    }
+    in_order_helper(node->left);
+    printf(" %s", node->item->key);
+    in_order_helper(node->right);
+}
+
+void pre_order(struct Cbst *tree)
+{
+    printf("pre_order:");
+    pre_order_helper(tree->root);
+    printf("\n");
+}
+
+void pre_order_helper(struct Node *node)
+{
+    if (node == NULL || node->item == NULL)
+    {
+        return;
+    }
+    printf(" %s-[%d]", node->item->key, getBalance(node), getNodeHeight(node));
+    pre_order_helper(node->left);
+    pre_order_helper(node->right);
+}
+
 struct Node *get_node(struct Cbst *tree, char key[])
 {
     struct Node *temp = tree->root;
@@ -126,42 +162,6 @@ char *get_item(struct Cbst *tree, char key[])
     }
 
     return temp->item->value;
-}
-
-void in_order(struct Cbst *tree)
-{
-    printf("in_order:");
-    in_order_helper(tree->root);
-    printf("\n");
-}
-
-void in_order_helper(struct Node *node)
-{
-    if (node == NULL || node->item == NULL)
-    {
-        return;
-    }
-    in_order_helper(node->left);
-    printf(" %s", node->item->key);
-    in_order_helper(node->right);
-}
-
-void pre_order(struct Cbst *tree)
-{
-    printf("pre_order:");
-    pre_order_helper(tree->root);
-    printf("\n");
-}
-
-void pre_order_helper(struct Node *node)
-{
-    if (node == NULL || node->item == NULL)
-    {
-        return;
-    }
-    printf(" %s-[%d]", node->item->key, getBalance(node), getNodeHeight(node));
-    pre_order_helper(node->left);
-    pre_order_helper(node->right);
 }
 
 void updateHeight(struct Node *node)
@@ -275,7 +275,7 @@ void segfault_handler(int signal_num)
 }
 
 int dataNum = 5;
-void insert_data(struct Cbst *tree)
+void insert_data(struct Cbst *tree, char c)
 {
 
     for (int i = 1; i <= dataNum; i++)
@@ -286,13 +286,13 @@ void insert_data(struct Cbst *tree)
             printf("Memory allocation failed.\n");
             return 1;
         }
-        memset(str, 'c', i);
+        memset(str, c, i);
         str[i] = '\0';
         insert_item(tree, str, str);
     }
 }
 
-void assert_data(struct Cbst *tree)
+void assert_data(struct Cbst *tree, char c)
 {
     for (int i = 1; i <= dataNum; i++)
     {
@@ -302,7 +302,7 @@ void assert_data(struct Cbst *tree)
             printf("Memory allocation failed.\n");
             return 1;
         }
-        memset(str, 'c', i);
+        memset(str, c, i);
         str[i] = '\0';
         char *get = get_item(tree, str);
         assert(strcmp(get, str) == 0);
@@ -314,7 +314,7 @@ int main()
 
     struct Cbst *tree = create_tree();
 
-    insert_data(tree);
+    insert_data(tree, 'c');
 
     // insert_item(tree, "b", "x");
     // printf("--------\n");
@@ -324,9 +324,9 @@ int main()
     in_order(tree);
     pre_order(tree);
 
-    assert_data(tree);
-    // insert_data(tree);
-    // assert_data(tree);
+    assert_data(tree, 'c');
+    insert_data(tree, 'x');
+    assert_data(tree, 'c');
 
     printf("DONE.");
 
