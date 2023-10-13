@@ -44,7 +44,7 @@ struct Node *create_node()
 
     newNode->left = NULL;
     newNode->right = NULL;
-    newNode->item = create_item(); // Create a new Item for the node
+    newNode->item = NULL; // Create a new Item for the node
     return newNode;
 }
 
@@ -68,6 +68,8 @@ void insert_item(struct Cbst *tree, char key[], char value[])
         printf("root null.\n");
         struct Node *node = create_node();
         tree->root = node;
+
+        node->item = create_item();
         tree->root->item->key = key;
         tree->root->item->value = value;
         return;
@@ -79,11 +81,10 @@ void insert_item(struct Cbst *tree, char key[], char value[])
     while (temp->item != NULL)
     {
         count++;
-        printf("null? %d %s %s\n", temp->item == NULL, temp->item->key, key);
+
         int comp = strcmp(temp->item->key, key);
         if (comp > 0)
         {
-            printf("right? %d\n", temp->right == NULL);
             if (temp->right == NULL)
             {
                 temp->right = create_node();
@@ -93,7 +94,6 @@ void insert_item(struct Cbst *tree, char key[], char value[])
         }
         else if (comp < 0)
         {
-            printf("left? %d\n", temp->left == NULL);
             if (temp->left == NULL)
             {
                 temp->left = create_node();
@@ -106,6 +106,7 @@ void insert_item(struct Cbst *tree, char key[], char value[])
             break;
         }
     }
+    temp->item = create_item();
     temp->item->key = key;
     temp->item->value = value;
     printf("count = %d\n", count);
@@ -146,10 +147,12 @@ int main()
     insert_item(tree, "c", "nnn");
     insert_item(tree, "a", "nnn");
     insert_item(tree, "a", "nnn");
-    // insert_item(tree, "aa", "nnn");
-    // insert_item(tree, "aaa", "nnn");
-    // insert_item(tree, "aaaa", "nnn");
-    // insert_item(tree, "aaaaa", "nnn");
+    insert_item(tree, "aa", "nnn");
+    insert_item(tree, "aaa", "nnn");
+    insert_item(tree, "aaaa", "nnn");
+    insert_item(tree, "aaaaa", "nnn");
+    insert_item(tree, "aaaaaa", "nnn");
+    insert_item(tree, "aaaaaaa", "nnn");
 
     printf("get_item = %s\n", get_item(tree, "test"));
 
