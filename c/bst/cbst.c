@@ -46,13 +46,6 @@ struct Cbst *create_tree()
     return newTree;
 }
 
-void in_order(struct Cbst *tree)
-{
-    printf("in_order:");
-    in_order_helper(tree->root);
-    printf("\n");
-}
-
 void in_order_helper(struct Node *node)
 {
     if (node == NULL)
@@ -64,10 +57,10 @@ void in_order_helper(struct Node *node)
     in_order_helper(node->right);
 }
 
-void pre_order(struct Cbst *tree)
+void in_order(struct Cbst *tree)
 {
-    printf("pre_order:");
-    pre_order_helper(tree->root);
+    printf("in_order:");
+    in_order_helper(tree->root);
     printf("\n");
 }
 
@@ -80,6 +73,13 @@ void pre_order_helper(struct Node *node)
     printf(" %s", node->key);
     pre_order_helper(node->left);
     pre_order_helper(node->right);
+}
+
+void pre_order(struct Cbst *tree)
+{
+    printf("pre_order:");
+    pre_order_helper(tree->root);
+    printf("\n");
 }
 
 int get_height(struct Node *node)
