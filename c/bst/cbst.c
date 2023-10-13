@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 
 struct Item
 {
@@ -62,11 +63,52 @@ struct Cbst *create_tree()
 
 void insert_item(struct Cbst *tree, char key[], char value[])
 {
+    if (tree->root == NULL)
+    {
+        printf("root null.\n");
+        struct Node *node = create_node();
+        tree->root = node;
+        tree->root->item->key = key;
+        tree->root->item->value = value;
+        return;
+    }
 
-    struct Node *node = create_node();
-    tree->root = node;
-    tree->root->item->key = key;
-    tree->root->item->value = value;
+    struct Node *temp = tree->root;
+
+    int count = 0;
+    while (temp->item != NULL)
+    {
+        count++;
+        printf("null? %d %s %s\n", temp->item == NULL, temp->item->key, key);
+        int comp = strcmp(temp->item->key, key);
+        if (comp > 0)
+        {
+            printf("right? %d\n", temp->right == NULL);
+            if (temp->right == NULL)
+            {
+                temp->right = create_node();
+                break;
+            }
+            temp = temp->right;
+        }
+        else if (comp < 0)
+        {
+            printf("left? %d\n", temp->left == NULL);
+            if (temp->left == NULL)
+            {
+                temp->left = create_node();
+                break;
+            }
+            temp = temp->left;
+        }
+        else
+        {
+            break;
+        }
+    }
+    temp->item->key = key;
+    temp->item->value = value;
+    printf("count = %d\n", count);
 }
 
 char *get_item(struct Cbst *tree, char key[])
@@ -78,22 +120,40 @@ char *get_item(struct Cbst *tree, char key[])
     return NULL;
 }
 
+#include <stdio.h>
+#include <signal.h>
+#include <stdlib.h>
+
+void segfault_handler(int signal_num)
+{
+    printf("Caught segmentation fault! Exiting...\n");
+    exit(1);
+}
+
 int main()
 {
+    signal(SIGSEGV, segfault_handler);
 
     struct Cbst *tree = create_tree();
 
     printf("get_item = %s\n", get_item(&tree, "test"));
 
-    insert_item(tree, "insert_key", "insert_value");
+    insert_item(tree, "b", "aaa");
 
     printf("get_item = %s\n", get_item(tree, "test"));
 
-    insert_item(tree, "zzzz", "xxx");
+    insert_item(tree, "b", "xxx");
+    insert_item(tree, "c", "nnn");
+    insert_item(tree, "a", "nnn");
+    insert_item(tree, "a", "nnn");
+    // insert_item(tree, "aa", "nnn");
+    // insert_item(tree, "aaa", "nnn");
+    // insert_item(tree, "aaaa", "nnn");
+    // insert_item(tree, "aaaaa", "nnn");
 
     printf("get_item = %s\n", get_item(tree, "test"));
 
-    printf("DONE.%d", "a" < "b");
+    printf("DONE.");
 
     return 0;
 }
