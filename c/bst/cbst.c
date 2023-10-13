@@ -178,6 +178,7 @@ int main()
     insert_item(tree, "aaaaaa", "its a6");
 
     insert_item(tree, "bb", "its b2");
+    insert_item(tree, "ccc", "its c3");
 
     printf("get_item b = %s\n", get_item(tree, "b"));
     insert_item(tree, "aaaaaaa", "its a7");
