@@ -100,27 +100,27 @@ int get_balance(struct Node *node)
     return get_height(node->left) - get_height(node->right);
 }
 
-// struct Node *left_rotate(struct Node *node)
-// {
-//     printf("left balance %d %d\n", getBalance(node), node->right != NULL);
-//     struct Node *right = (node->right != NULL) ? node->right : create_node(node);
-//     struct Node *temp = (right->left != NULL) ? right->left : create_node(right);
-//     temp->left = node;
-//     node->right = temp;
-//     // TODO update height
-//     return right;
-// }
+struct Node *left_rotate(struct Node *node)
+{
+    printf("left balance %d %d\n", get_balance(node), node->right != NULL);
+    struct Node *right = (node->right != NULL) ? node->right : create_node(node);
+    struct Node *temp = (right->left != NULL) ? right->left : create_node(right);
+    temp->left = node;
+    node->right = temp;
+    // TODO update height
+    return right;
+}
 
-// struct Node *right_rotate(struct Node *node)
-// {
-//     printf("left balance %d %d\n", getBalance(node), node->right != NULL);
-//     struct Node *left = (node->left != NULL) ? node->left : create_node(node);
-//     struct Node *temp = (left->right != NULL) ? left->right : create_node(left);
-//     temp->right = node;
-//     node->left = temp;
-//     // TODO update height
-//     return left;
-// }
+struct Node *right_rotate(struct Node *node)
+{
+    printf("left balance %d %d\n", get_balance(node), node->right != NULL);
+    struct Node *left = (node->left != NULL) ? node->left : create_node(node);
+    struct Node *temp = (left->right != NULL) ? left->right : create_node(left);
+    temp->right = node;
+    node->left = temp;
+    // TODO update height
+    return left;
+}
 
 struct Node *insert_node(struct Node *node, char key[], char value[])
 {
