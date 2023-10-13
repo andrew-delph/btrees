@@ -69,7 +69,7 @@ struct Node *get_node(struct Cbst *tree, char key[])
     {
         count++;
 
-        int comp = strcmp(temp->item->key, key);
+        int comp = strcmp(key, temp->item->key);
         if (comp > 0)
         {
             if (temp->right == NULL)
@@ -119,6 +119,24 @@ char *get_item(struct Cbst *tree, char key[])
     return temp->item->value;
 }
 
+void in_order(struct Cbst *tree)
+{
+    printf("in_order:");
+    in_order_helper(tree->root);
+    printf("\n");
+}
+
+void in_order_helper(struct Node *node)
+{
+    if (node == NULL || node->item == NULL)
+    {
+        return;
+    }
+    in_order_helper(node->left);
+    printf(" %s", node->item->key);
+    in_order_helper(node->right);
+}
+
 #include <stdio.h>
 #include <signal.h>
 #include <stdlib.h>
@@ -158,6 +176,9 @@ int main()
     insert_item(tree, "aaaaa", "its a5");
     printf("get_item b = %s\n", get_item(tree, "b"));
     insert_item(tree, "aaaaaa", "its a6");
+
+    insert_item(tree, "bb", "its b2");
+
     printf("get_item b = %s\n", get_item(tree, "b"));
     insert_item(tree, "aaaaaaa", "its a7");
     printf("get_item b = %s\n", get_item(tree, "b"));
@@ -166,6 +187,8 @@ int main()
     printf("get_item aaa = %s\n", get_item(tree, "aaa"));
     printf("get_item aaa = %s\n", get_item(tree, "aaa"));
     printf("get_item b = %s\n", get_item(tree, "b"));
+
+    in_order(tree);
 
     printf("DONE.");
 
