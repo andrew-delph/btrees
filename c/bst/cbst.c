@@ -164,10 +164,10 @@ struct Node *insert(struct Cbst *tree, char key[], char value[])
 
 char *get_node(struct Node *node, char *key)
 {
-    // if (node == NULL)
-    // {
-    //     return NULL;
-    // }
+    if (node == NULL)
+    {
+        return NULL;
+    }
     int comp = strcmp(node->key, key);
     if (comp > 0)
     {
@@ -239,6 +239,8 @@ int main()
     printf("started.\n");
 
     struct Cbst *tree = create_tree();
+
+    assert(get_value(tree, "test") == NULL);
 
     insert_data(tree, 'c');
 
