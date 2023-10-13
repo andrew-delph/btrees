@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "utils.h"
+#include <assert.h>
 
 struct Item
 {
@@ -111,6 +112,7 @@ void insert_item(struct Cbst *tree, char key[], char value[])
     temp->item->key = key;
     temp->item->value = value;
     updateHeight(temp);
+    balanceNode(temp);
 }
 
 char *get_item(struct Cbst *tree, char key[])
@@ -184,6 +186,30 @@ int getBalance(struct Node *node)
     return getNodeHeight(node->left) - getNodeHeight(node->right);
 }
 
+int balanceNode(struct Node *node)
+{
+    int balance = getBalance(node);
+    if (balance > 1)
+    {
+        printf("balance %d\n", balance);
+    }
+    else if (balance < -1)
+    {
+        printf("balance %d\n", balance);
+    }
+    return 1;
+}
+
+int rightRotate(struct Node *node)
+{
+    return 1;
+}
+
+int leftRotate(struct Node *node)
+{
+    return 1;
+}
+
 #include <stdio.h>
 #include <signal.h>
 #include <stdlib.h>
@@ -200,49 +226,33 @@ int main()
 
     struct Cbst *tree = create_tree();
 
-    printf("get_item test = %s\n", get_item(&tree, "test"));
-
     insert_item(tree, "b", "its b");
-    printf("tree height = %d\n", getTreeHeight(tree));
-    printf("inserted b\n");
-    printf("get_item b = %s\n", get_item(tree, "b"));
-    printf("get_item b = %s\n", get_item(tree, "b"));
-    printf("tree height = %d\n", getTreeHeight(tree));
+
+    assert(get_item(tree, "b") == "its b");
+    assert(get_item(tree, "b") == "its b");
 
     insert_item(tree, "c", "its c");
-    printf("get_item b = %s\n", get_item(tree, "b"));
-    printf("get_item b = %s\n", get_item(tree, "b"));
-
-    printf("tree height = %d\n", getTreeHeight(tree));
+    assert(get_item(tree, "b") == "its b");
+    assert(get_item(tree, "b") == "its b");
 
     insert_item(tree, "a", "its a");
-    printf("get_item b = %s\n", get_item(tree, "b"));
 
     insert_item(tree, "aa", "its a2");
-    printf("get_item b = %s\n", get_item(tree, "b"));
+    assert(get_item(tree, "b") == "its b");
     insert_item(tree, "aaa", "its a3");
-    printf("get_item b = %s\n", get_item(tree, "b"));
     insert_item(tree, "aaaa", "its a4");
-    printf("get_item b = %s\n", get_item(tree, "b"));
     insert_item(tree, "aaaaa", "its a5");
-    printf("tree height = %d\n", getTreeHeight(tree));
 
-    printf("get_item b = %s\n", get_item(tree, "b"));
-    insert_item(tree, "aaaaaa", "its a6");
-
-    printf("tree height = %d\n", getTreeHeight(tree));
+    assert(get_item(tree, "a") == "its a");
+    assert(get_item(tree, "aa") == "its a2");
+    assert(get_item(tree, "aaa") == "its a3");
+    assert(get_item(tree, "aaaa") == "its a4");
+    assert(get_item(tree, "aaaaa") == "its a5");
+    assert(get_item(tree, "b") == "its b");
 
     insert_item(tree, "bb", "its b2");
     insert_item(tree, "ccc", "its c3");
-
-    printf("get_item b = %s\n", get_item(tree, "b"));
     insert_item(tree, "aaaaaaa", "its a7");
-    printf("get_item b = %s\n", get_item(tree, "b"));
-
-    printf("get_item test = %s\n", get_item(tree, "test"));
-    printf("get_item aaa = %s\n", get_item(tree, "aaa"));
-    printf("get_item aaa = %s\n", get_item(tree, "aaa"));
-    printf("get_item b = %s\n", get_item(tree, "b"));
 
     in_order(tree);
 
@@ -261,6 +271,7 @@ int main()
     }
     printf("balance: %d\n", getBalance(tree->root));
 
+    assert(5 == 5);
     printf("DONE.");
 
     printf("min: %d, min %d\n", max(2, 5), max(2, 5));
