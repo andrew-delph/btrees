@@ -61,10 +61,9 @@ struct Cbst *create_tree()
     return newTree;
 }
 
-void insert_item(struct Cbst *tree, char key[], char value[])
+struct Node *get_node(struct Cbst *tree, char key[])
 {
     struct Node *temp = tree->root;
-
     int count = 0;
     while (temp->item != NULL)
     {
@@ -76,6 +75,7 @@ void insert_item(struct Cbst *tree, char key[], char value[])
             if (temp->right == NULL)
             {
                 temp->right = create_node();
+                temp = temp->right;
                 break;
             }
             temp = temp->right;
@@ -85,28 +85,40 @@ void insert_item(struct Cbst *tree, char key[], char value[])
             if (temp->left == NULL)
             {
                 temp->left = create_node();
+                temp = temp->left;
                 break;
             }
             temp = temp->left;
         }
         else
         {
+            printf("EQUAL key = %s\n", key);
             break;
         }
     }
+    // printf("count = %d\n", count);
+    return temp;
+}
+
+void insert_item(struct Cbst *tree, char key[], char value[])
+
+{
+    struct Node *temp = get_node(tree, key);
     temp->item = create_item();
     temp->item->key = key;
     temp->item->value = value;
-    printf("count = %d\n", count);
 }
 
 char *get_item(struct Cbst *tree, char key[])
 {
-    if (tree != NULL && tree->root != NULL && tree->root->item != NULL)
+    struct Node *temp = get_node(tree, key);
+
+    if (temp->item == NULL)
     {
-        return tree->root->item->value;
+        return NULL;
     }
-    return NULL;
+
+    return temp->item->value;
 }
 
 #include <stdio.h>
@@ -125,24 +137,37 @@ int main()
 
     struct Cbst *tree = create_tree();
 
-    printf("get_item = %s\n", get_item(&tree, "test"));
+    printf("get_item test = %s\n", get_item(&tree, "test"));
 
-    insert_item(tree, "b", "aaa");
+    insert_item(tree, "b", "its b");
+    printf("inserted b\n");
+    printf("get_item b = %s\n", get_item(tree, "b"));
+    printf("get_item b = %s\n", get_item(tree, "b"));
 
-    printf("get_item = %s\n", get_item(tree, "test"));
+    insert_item(tree, "c", "its c");
+    printf("get_item b = %s\n", get_item(tree, "b"));
+    printf("get_item b = %s\n", get_item(tree, "b"));
 
-    insert_item(tree, "b", "xxx");
-    insert_item(tree, "c", "nnn");
-    insert_item(tree, "a", "nnn");
-    insert_item(tree, "a", "nnn");
-    insert_item(tree, "aa", "nnn");
-    insert_item(tree, "aaa", "nnn");
-    insert_item(tree, "aaaa", "nnn");
-    insert_item(tree, "aaaaa", "nnn");
-    insert_item(tree, "aaaaaa", "nnn");
-    insert_item(tree, "aaaaaaa", "nnn");
+    insert_item(tree, "a", "its a");
+    printf("get_item b = %s\n", get_item(tree, "b"));
 
-    printf("get_item = %s\n", get_item(tree, "test"));
+    insert_item(tree, "aa", "its a2");
+    printf("get_item b = %s\n", get_item(tree, "b"));
+    insert_item(tree, "aaa", "its a3");
+    printf("get_item b = %s\n", get_item(tree, "b"));
+    insert_item(tree, "aaaa", "its a4");
+    printf("get_item b = %s\n", get_item(tree, "b"));
+    insert_item(tree, "aaaaa", "its a5");
+    printf("get_item b = %s\n", get_item(tree, "b"));
+    insert_item(tree, "aaaaaa", "its a6");
+    printf("get_item b = %s\n", get_item(tree, "b"));
+    insert_item(tree, "aaaaaaa", "its a7");
+    printf("get_item b = %s\n", get_item(tree, "b"));
+
+    printf("get_item test = %s\n", get_item(tree, "test"));
+    printf("get_item aaa = %s\n", get_item(tree, "aaa"));
+    printf("get_item aaa = %s\n", get_item(tree, "aaa"));
+    printf("get_item b = %s\n", get_item(tree, "b"));
 
     printf("DONE.");
 
