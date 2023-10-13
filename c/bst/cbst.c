@@ -92,7 +92,6 @@ struct Node *get_node(struct Cbst *tree, char key[])
         }
         else
         {
-            printf("EQUAL key = %s\n", key);
             break;
         }
     }
@@ -101,7 +100,6 @@ struct Node *get_node(struct Cbst *tree, char key[])
 }
 
 void insert_item(struct Cbst *tree, char key[], char value[])
-
 {
     struct Node *temp = get_node(tree, key);
     temp->item = create_item();
