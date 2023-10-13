@@ -1,6 +1,9 @@
 cc_library(
     name = "deps",
-    srcs = glob(["*.cc"]),
+    srcs = glob([
+        "*.cc",
+        "*.c",
+    ]),
     hdrs = glob(["*.h"]),
 )
 
