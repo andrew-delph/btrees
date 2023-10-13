@@ -42,7 +42,7 @@ struct Cbst *create_tree()
         exit(1);
     }
 
-    newTree->root = create_node();
+    newTree->root = NULL;
     return newTree;
 }
 
@@ -99,39 +99,27 @@ int get_balance(struct Node *node)
     return get_height(node->left) - get_height(node->right);
 }
 
-struct Node *left_rotate(struct Node *node)
-{
-    printf("left balance %d %d\n", getBalance(node), node->right != NULL);
-    struct Node *right = (node->right != NULL) ? node->right : create_node(node);
-    struct Node *temp = (right->left != NULL) ? right->left : create_node(right);
-    temp->left = node;
-    node->right = temp;
-    // TODO update height
-    return right;
-}
+// struct Node *left_rotate(struct Node *node)
+// {
+//     printf("left balance %d %d\n", getBalance(node), node->right != NULL);
+//     struct Node *right = (node->right != NULL) ? node->right : create_node(node);
+//     struct Node *temp = (right->left != NULL) ? right->left : create_node(right);
+//     temp->left = node;
+//     node->right = temp;
+//     // TODO update height
+//     return right;
+// }
 
-struct Node *right_rotate(struct Node *node)
-{
-    printf("left balance %d %d\n", getBalance(node), node->right != NULL);
-    struct Node *left = (node->left != NULL) ? node->left : create_node(node);
-    struct Node *temp = (left->right != NULL) ? left->right : create_node(left);
-    temp->right = node;
-    node->left = temp;
-    // TODO update height
-    return left;
-}
-
-struct Node *insert(struct Cbst *tree, char key[], char value[])
-{
-    if (tree->root == NULL)
-    {
-        tree->root->key = key;
-        tree->root->value = value;
-        return tree->root;
-    }
-
-    return insert_node(tree->root, key, value);
-}
+// struct Node *right_rotate(struct Node *node)
+// {
+//     printf("left balance %d %d\n", getBalance(node), node->right != NULL);
+//     struct Node *left = (node->left != NULL) ? node->left : create_node(node);
+//     struct Node *temp = (left->right != NULL) ? left->right : create_node(left);
+//     temp->right = node;
+//     node->left = temp;
+//     // TODO update height
+//     return left;
+// }
 
 struct Node *insert_node(struct Node *node, char key[], char value[])
 {
@@ -160,17 +148,25 @@ struct Node *insert_node(struct Node *node, char key[], char value[])
     return node;
 }
 
-char *get_value(struct Cbst *tree, char key[])
+struct Node *insert(struct Cbst *tree, char key[], char value[])
 {
-    return get_node(tree->root, key);
+    if (tree->root == NULL)
+    {
+        tree->root = create_node();
+        tree->root->key = key;
+        tree->root->value = value;
+        return tree->root;
+    }
+
+    return insert_node(tree->root, key, value);
 }
 
-char *get_node(struct Node *node, char key[])
+char *get_node(struct Node *node, char *key)
 {
-    if (node == NULL)
-    {
-        return NULL;
-    }
+    // if (node == NULL)
+    // {
+    //     return NULL;
+    // }
     int comp = strcmp(node->key, key);
     if (comp > 0)
     {
@@ -184,6 +180,11 @@ char *get_node(struct Node *node, char key[])
     {
         return node->value;
     }
+}
+
+char *get_value(struct Cbst *tree, char *key)
+{
+    return get_node(tree->root, key);
 }
 
 #include <stdio.h>
@@ -245,7 +246,7 @@ int main()
     // insert_item(tree, "b", "x");
     // insert_data(tree, 'x');
 
-    // assert_data(tree, 'c');
+    assert_data(tree, 'c');
 
     // printf("--------\n");
     in_order(tree);
