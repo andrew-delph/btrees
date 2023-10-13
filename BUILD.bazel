@@ -23,6 +23,14 @@ cc_binary(
     ],
 )
 
+cc_binary(
+    name = "hello2",
+    srcs = ["hello2.c"],
+    deps = [
+        ":deps",
+    ],
+)
+
 cc_test(
     name = "test",
     srcs = ["test/test.cc"],
