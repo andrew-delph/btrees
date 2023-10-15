@@ -27,6 +27,7 @@ struct Node *create_node()
     if (newNode == NULL)
     {
         // Handle memory allocation failure
+        printf("HERE!\n");
         exit(1);
     }
 
@@ -92,7 +93,7 @@ int get_height(struct Node *node)
     {
         return 0;
     }
-    return 1 + max(get_height(node->left), get_height(node->right));
+    return node->height;
 }
 
 int get_balance(struct Node *node)
@@ -112,6 +113,8 @@ struct Node *left_rotate(struct Node *node)
     temp->left = node;
     node->right = temp;
     // TODO update height
+    node->height = 1 + max(get_height(node->left), get_height(node->right));
+    right->height = 1 + max(get_height(right->left), get_height(right->right));
 
     return right;
 }
@@ -124,6 +127,8 @@ struct Node *right_rotate(struct Node *node)
     temp->right = node;
     node->left = temp;
     // TODO update height
+    node->height = 1 + max(get_height(node->left), get_height(node->right));
+    left->height = 1 + max(get_height(left->left), get_height(left->right));
 
     return left;
 }
@@ -137,7 +142,7 @@ struct Node *insert_node(struct Node *node, char key[], char value[])
         node->value = value;
         return node;
     }
-    int comp = strcmp(node->key, key);
+    int comp = strcmp(key, node->key);
     if (comp > 0)
     {
         node->right = insert_node(node->right, key, value);
@@ -279,10 +284,14 @@ int main()
 
     assert(get_value(tree, "test") == NULL);
 
-    insert(tree, "a", "X");
+    insert(tree, "2", "X");
+    insert(tree, "3", "X");
+    insert(tree, "4", "X");
+    insert(tree, "1", "X");
     insert(tree, "aa", "X");
-    insert(tree, "aaa", "X");
-    insert(tree, "aaaa", "X");
+    insert(tree, "a", "X");
+
+    get_height(tree->root);
 
     in_order(tree);
     pre_order(tree);
