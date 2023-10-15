@@ -240,9 +240,25 @@ int size_helper(struct Node *node)
     return node->items->length + size_helper(node->left) + size_helper(node->right);
 }
 
-int size(struct Btree *tree)
+int get_size(struct Btree *tree)
 {
     return size_helper(tree->root);
+}
+
+int height_helper(struct Node *node)
+{
+    if (node == NULL)
+    {
+        return 0;
+    }
+    // printf("size_helper %d\n", node->items->length);
+
+    return 1 + height_helper(node->left) + height_helper(node->right);
+}
+
+int get_height(struct Btree *tree)
+{
+    return height_helper(tree->root);
 }
 
 int main()
@@ -259,9 +275,13 @@ int main()
 
     in_order(tree);
 
-    int count = size(tree);
-    printf("count: %d\n", count);
-    assert(num == count);
+    int size = get_size(tree);
+    printf("size: %d\n", size);
+
+    int height = get_height(tree);
+    printf("height: %d\n", height);
+
+    assert(num == size);
     printf("\nDONE.\n");
 
     return 0;
