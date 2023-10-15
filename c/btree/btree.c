@@ -49,20 +49,6 @@ struct Items *create_items()
     return items;
 }
 
-int compare_items(const void *a, const void *b)
-{
-    const struct Item *itemA = (const struct Item *)a;
-    const struct Item *itemB = (const struct Item *)b;
-
-    return strcmp(itemA->key, itemB->key);
-}
-
-// Function to sort the items by the 'value' key
-void sort_items(struct Items *items)
-{
-    qsort(items->items, items->length, sizeof(struct Item), compare_items);
-}
-
 void items_append(struct Items *items, const char *key, const char *value)
 {
     int new_length = items->length + 1;
@@ -79,8 +65,6 @@ void items_append(struct Items *items, const char *key, const char *value)
 
     items->items = new_items;
     items->length = new_length;
-
-    sort_items(items);
 }
 
 // Function to get the length of the Items structure
