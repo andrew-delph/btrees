@@ -220,7 +220,8 @@ char *get_node(struct Node *node, char *key)
     {
         return NULL;
     }
-    int comp = strcmp(node->key, key);
+    int comp = strcmp(key, node->key);
+
     if (comp > 0)
     {
         return get_node(node->right, key);
@@ -250,7 +251,7 @@ void segfault_handler(int signal_num)
     exit(1);
 }
 
-int dataNum = 30000;
+int dataNum = 3000;
 void insert_data(struct Cbst *tree, char c)
 {
 
@@ -338,24 +339,26 @@ int main()
 
     // insert_data(tree, 'c');
 
-    in_order(tree);
-    // pre_order(tree);
-
-    printf("height: %d\n", get_height(tree->root));
-    size(tree);
-
-    // insert_data(tree, 'c');
-    // insert_data(tree, 'y');
-    // insert_data(tree, 'z');
+    insert_data(tree, 'c');
+    insert_data(tree, 'y');
+    insert_data(tree, 'z');
 
     // insert_item(tree, "b", "x");
     // printf("--------\n");
     // insert_item(tree, "b", "x");
     // insert_data(tree, 'x');
 
-    // assert_data(tree, 'c');
-    // assert_data(tree, 'y');
-    // assert_data(tree, 'z');
+    // in_order(tree);
+    // pre_order(tree);
+
+    printf("height: %d\n", get_height(tree->root));
+    size(tree);
+
+    printf("tget_test: %s\n", get_value(tree, "2"));
+
+    assert_data(tree, 'c');
+    assert_data(tree, 'y');
+    assert_data(tree, 'z');
 
     // printf("--------\n");
 
