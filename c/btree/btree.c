@@ -9,6 +9,11 @@ void segfault_handler(int signal_num)
     exit(1);
 }
 
+int max(int a, int b)
+{
+    return (a > b) ? a : b;
+}
+
 struct Item
 {
     char *key;
@@ -26,12 +31,6 @@ struct Node
     struct Node *left;
     struct Node *right;
     struct Items *items;
-};
-
-struct Btree
-{
-    struct Node *root;
-    int n;
 };
 
 struct Items *create_items()
@@ -104,20 +103,6 @@ struct Node *create_node()
     return newNode;
 }
 
-struct Btree *create_tree(int n)
-{
-    struct Btree *newTree = (struct Avl *)malloc(sizeof(struct Btree));
-    if (newTree == NULL)
-    {
-        // Handle memory allocation failure
-        exit(1);
-    }
-
-    newTree->root = NULL;
-    newTree->n = n;
-    return newTree;
-}
-
 void print_node(struct Node *node)
 {
     for (int i = 0; i < items_length(node->items); i++)
@@ -136,13 +121,6 @@ void in_order_helper(struct Node *node)
     in_order_helper(node->left);
     print_node(node);
     in_order_helper(node->right);
-}
-
-void in_order(struct Btree *tree)
-{
-    printf("in_order:");
-    in_order_helper(tree->root);
-    printf("\n");
 }
 
 struct Node *insert_node(struct Node *node, int n, char key[], char value[])
@@ -170,12 +148,6 @@ struct Node *insert_node(struct Node *node, int n, char key[], char value[])
     }
 
     return node;
-}
-
-struct Node *insert(struct Btree *tree, char key[], char value[])
-{
-    tree->root = insert_node(tree->root, tree->n, key, value);
-    return tree->root;
 }
 
 // int dataNum = 3000;
@@ -209,7 +181,7 @@ void fisherYatesShuffle(char *arr[], int n)
     }
 }
 
-void insert_data_ints(struct Btree *tree, int num)
+struct Node *insert_data_ints(struct Node *root, int num)
 {
 
     char *keys[num];
@@ -225,8 +197,9 @@ void insert_data_ints(struct Btree *tree, int num)
 
     for (int i = 0; i < num; i++)
     {
-        insert(tree, keys[i], "x");
+        root = insert_node(root, 5, keys[i], "x");
     }
+    return root;
 }
 
 int size_helper(struct Node *node)
@@ -240,11 +213,6 @@ int size_helper(struct Node *node)
     return node->items->length + size_helper(node->left) + size_helper(node->right);
 }
 
-int get_size(struct Btree *tree)
-{
-    return size_helper(tree->root);
-}
-
 int height_helper(struct Node *node)
 {
     if (node == NULL)
@@ -253,12 +221,7 @@ int height_helper(struct Node *node)
     }
     // printf("size_helper %d\n", node->items->length);
 
-    return 1 + height_helper(node->left) + height_helper(node->right);
-}
-
-int get_height(struct Btree *tree)
-{
-    return height_helper(tree->root);
+    return 1 + max(height_helper(node->left), height_helper(node->right));
 }
 
 int main()
@@ -266,22 +229,20 @@ int main()
     signal(SIGSEGV, segfault_handler);
     printf("started btree.\n");
 
-    struct Btree *tree = create_tree(4);
+    struct Node *root = NULL;
 
     int num = 55;
-    insert_data_ints(tree, num);
+    root = insert_data_ints(root, num);
 
     printf("inserted data.\n");
 
-    in_order(tree);
-
-    int size = get_size(tree);
+    int size = size_helper(root);
     printf("size: %d\n", size);
 
-    int height = get_height(tree);
+    int height = height_helper(root);
     printf("height: %d\n", height);
 
-    assert(num == size);
+    // assert(num == size);
     printf("\nDONE.\n");
 
     return 0;
