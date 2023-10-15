@@ -198,7 +198,7 @@ void segfault_handler(int signal_num)
     exit(1);
 }
 
-int dataNum = 6;
+int dataNum = 100;
 void insert_data(struct Cbst *tree, char c)
 {
 
@@ -243,6 +243,8 @@ int main()
     assert(get_value(tree, "test") == NULL);
 
     insert_data(tree, 'c');
+    insert_data(tree, 'y');
+    insert_data(tree, 'z');
 
     // insert_item(tree, "b", "x");
     // printf("--------\n");
@@ -250,10 +252,12 @@ int main()
     // insert_data(tree, 'x');
 
     assert_data(tree, 'c');
+    assert_data(tree, 'y');
+    assert_data(tree, 'z');
 
     // printf("--------\n");
-    in_order(tree);
-    pre_order(tree);
+    // in_order(tree);
+    // pre_order(tree);
 
     printf("DONE.\n");
 
