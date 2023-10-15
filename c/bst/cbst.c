@@ -168,7 +168,6 @@ struct Node *insert_node(struct Node *node, char key[], char value[])
     int balance = get_balance(node);
     if (balance > 1)
     {
-        printf("null? %d\n", node->left->key);
         if (strcmp(key, node->left->key) < 0)
         {
 
@@ -248,7 +247,7 @@ void segfault_handler(int signal_num)
     exit(1);
 }
 
-int dataNum = 100;
+int dataNum = 2;
 void insert_data(struct Cbst *tree, char c)
 {
 
@@ -282,7 +281,7 @@ void fisherYatesShuffle(char *arr[], int n)
 void insert_data_ints(struct Cbst *tree)
 {
 
-    char *keys[101];
+    char *keys[dataNum];
 
     // Initialize keys array with string values "0" to "100"
     for (int i = 0; i < dataNum; i++)
@@ -291,9 +290,9 @@ void insert_data_ints(struct Cbst *tree)
         snprintf(keys[i], 4, "%d", i); // Convert integer to string
     }
 
-    fisherYatesShuffle(keys, 101);
+    fisherYatesShuffle(keys, dataNum);
 
-    for (int i = 0; i <= 100; i++)
+    for (int i = 0; i < dataNum; i++)
     {
         insert(tree, keys[i], "x");
     }
