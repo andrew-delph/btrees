@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <assert.h>
 
+#define T 3
+
 void segfault_handler(int signal_num)
 {
     printf("Caught segmentation fault! Exiting...\n");
@@ -123,14 +125,14 @@ void in_order_helper(struct Node *node)
     in_order_helper(node->right);
 }
 
-struct Node *insert_node(struct Node *node, int n, char key[], char value[])
+struct Node *insert_node(struct Node *node, char key[], char value[])
 {
     if (node == NULL)
     {
-        node = create_node(n);
+        node = create_node();
     }
 
-    if (items_length(node->items) < n)
+    if (items_length(node->items) < T)
     {
         items_append(node->items, key, value);
     }
@@ -138,12 +140,12 @@ struct Node *insert_node(struct Node *node, int n, char key[], char value[])
     {
         if (strcmp(key, node->items->items[0].key) < 0)
         {
-            node->left = insert_node(node->left, n, key, value);
+            node->left = insert_node(node->left, key, value);
         }
         // else if (strcmp(key, node->items->items[n - 1].key) > 0)
         else
         {
-            node->right = insert_node(node->right, n, key, value);
+            node->right = insert_node(node->right, key, value);
         }
     }
 
@@ -197,7 +199,7 @@ struct Node *insert_data_ints(struct Node *root, int num)
 
     for (int i = 0; i < num; i++)
     {
-        root = insert_node(root, 5, keys[i], "x");
+        root = insert_node(root, keys[i], "x");
     }
     return root;
 }
@@ -231,10 +233,14 @@ int main()
 
     struct Node *root = NULL;
 
-    int num = 55;
+    int num = 10;
     root = insert_data_ints(root, num);
 
-    printf("inserted data.\n");
+    printf("inserted data.\n\n");
+
+    printf("in_order: ");
+    in_order_helper(root);
+    printf("\n\n");
 
     int size = size_helper(root);
     printf("size: %d\n", size);

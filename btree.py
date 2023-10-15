@@ -74,7 +74,7 @@ class BTree:
 def main():
     B = BTree(3)
 
-    for i in range(10):
+    for i in range(30):
         B.insert((i, 2 * i))
 
     B.print_tree(B.root)
