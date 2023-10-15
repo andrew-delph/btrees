@@ -122,12 +122,11 @@ int get_balance(struct Node *node)
 
 struct Node *left_rotate(struct Node *node)
 {
-    printf("left balance\n");
-    // struct Node *right = node->right;
-    // struct Node *temp = right->left;
-    struct Node *right = (node->right != NULL) ? node->right : create_node(node);
-    struct Node *temp = (right->left != NULL) ? right->left : create_node(right);
-    temp->left = node;
+    struct Node *right = node->right;
+    struct Node *temp = right->left;
+    // struct Node *right = (node->right != NULL) ? node->right : create_node(node);
+    // struct Node *temp = (right->left != NULL) ? right->left : create_node(right);
+    right->left = node;
     node->right = temp;
     // TODO update height
     node->height = 1 + max(get_height(node->left), get_height(node->right));
@@ -138,12 +137,11 @@ struct Node *left_rotate(struct Node *node)
 
 struct Node *right_rotate(struct Node *node)
 {
-    printf("left balance\n");
-    // struct Node *left = node->left;
-    // struct Node *temp = left->right;
-    struct Node *left = (node->left != NULL) ? node->left : create_node(node);
-    struct Node *temp = (left->right != NULL) ? left->right : create_node(left);
-    temp->right = node;
+    struct Node *left = node->left;
+    struct Node *temp = left->right;
+    // struct Node *left = (node->left != NULL) ? node->left : create_node(node);
+    // struct Node *temp = (left->right != NULL) ? left->right : create_node(left);
+    left->right = node;
     node->left = temp;
     // TODO update height
     node->height = 1 + max(get_height(node->left), get_height(node->right));
@@ -193,35 +191,26 @@ struct Node *insert_node(struct Node *node, char key[], char value[])
             return right_rotate(node);
         }
     }
-    // else if (balance < -1)
-    // {
-    //     if (strcmp(key, node->right->key) > 0)
-    //     {
+    if (balance < -1)
+    {
+        if (strcmp(key, node->right->key) > 0)
+        {
 
-    //         return left_rotate(node);
-    //     }
-    //     else
-    //     {
-    //         node->left = right_rotate(node->left);
-    //         return left_rotate(node);
-    //     }
-    // }
+            return left_rotate(node);
+        }
+        else
+        {
+            node->right = right_rotate(node->right);
+            return left_rotate(node);
+        }
+    }
 
     return node;
 }
 
 struct Node *insert(struct Cbst *tree, char key[], char value[])
 {
-    // if (tree->root == NULL)
-    // {
-    //     tree->root = create_node();
-    //     tree->root->key = key;
-    //     tree->root->value = value;
-    //     return tree->root;
-    // }
-
     tree->root = insert_node(tree->root, key, value);
-
     return tree->root;
 }
 
@@ -261,7 +250,7 @@ void segfault_handler(int signal_num)
     exit(1);
 }
 
-int dataNum = 8;
+int dataNum = 30000;
 void insert_data(struct Cbst *tree, char c)
 {
 
@@ -300,8 +289,8 @@ void insert_data_ints(struct Cbst *tree)
     // Initialize keys array with string values "0" to "100"
     for (int i = 0; i < dataNum; i++)
     {
-        keys[i] = malloc(4);           // Allocate memory for the string
-        snprintf(keys[i], 4, "%d", i); // Convert integer to string
+        keys[i] = malloc(10);           // Allocate memory for the string
+        snprintf(keys[i], 10, "%d", i); // Convert integer to string
     }
 
     fisherYatesShuffle(keys, dataNum);
