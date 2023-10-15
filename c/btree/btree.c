@@ -48,6 +48,20 @@ struct Items *create_items()
     return items;
 }
 
+int compare_items(const void *a, const void *b)
+{
+    const struct Item *itemA = (const struct Item *)a;
+    const struct Item *itemB = (const struct Item *)b;
+
+    return strcmp(itemA->key, itemB->key);
+}
+
+// Function to sort the items by the 'value' key
+void sort_items(struct Items *items)
+{
+    qsort(items->items, items->length, sizeof(struct Item), compare_items);
+}
+
 void items_append(struct Items *items, const char *key, const char *value)
 {
     int new_length = items->length + 1;
@@ -64,26 +78,14 @@ void items_append(struct Items *items, const char *key, const char *value)
 
     items->items = new_items;
     items->length = new_length;
+
+    sort_items(items);
 }
 
 // Function to get the length of the Items structure
 int items_length(const struct Items *items)
 {
     return items->length;
-}
-
-int compare_items(const void *a, const void *b)
-{
-    const struct Item *itemA = (const struct Item *)a;
-    const struct Item *itemB = (const struct Item *)b;
-
-    return strcmp(itemA->key, itemB->key);
-}
-
-// Function to sort the items by the 'value' key
-void sort_items(struct Items *items)
-{
-    qsort(items->items, items->length, sizeof(struct Item), compare_items);
 }
 
 struct Node *create_node()
@@ -114,6 +116,33 @@ struct Btree *create_tree(int n)
     newTree->root = NULL;
     newTree->n = n;
     return newTree;
+}
+
+void print_node(struct Node *node)
+{
+    for (int i = 0; i < items_length(node->items); i++)
+    {
+        printf(" %s", node->items->items[i].key);
+    }
+}
+
+void in_order_helper(struct Node *node)
+{
+    if (node == NULL)
+    {
+        return;
+    }
+
+    in_order_helper(node->left);
+    print_node(node);
+    in_order_helper(node->right);
+}
+
+void in_order(struct Btree *tree)
+{
+    printf("in_order:");
+    in_order_helper(tree->root);
+    printf("\n");
 }
 
 struct Node *insert_node(struct Node *node, int n, char key[], char value[])
@@ -221,42 +250,14 @@ int main()
     signal(SIGSEGV, segfault_handler);
     printf("started btree.\n");
 
-    struct Btree *tree = create_tree(4);
+    struct Btree *tree = create_tree(10);
 
-    // struct Items *items = create_items();
-
-    // printf("len %d\n", items_length(items));
-
-    // items_append(items, "key1", "value1");
-
-    // items_append(items, "key2", "value2");
-
-    // items_append(items, "a", "value2");
-
-    // items_append(items, "c", "value2");
-
-    // items_append(items, "b", "value2");
-
-    // printf("len %d\n", items_length(items));
-
-    // for (int i = 0; i < items_length(items); i++)
-    // {
-    //     printf("Item %d: key = %s\n", i, items->items[i].key);
-    // }
-
-    // sort_items(items);
-
-    // printf("\nsorted.\n\n");
-
-    // for (int i = 0; i < items_length(items); i++)
-    // {
-    //     printf("Item %d: key = %s\n", i, items->items[i].key);
-    // }
-
-    int num = 200;
+    int num = 55;
     insert_data_ints(tree, num);
 
     printf("inserted data.\n");
+
+    in_order(tree);
 
     int count = size(tree);
     printf("count: %d\n", count);
