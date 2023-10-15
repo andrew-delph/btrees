@@ -52,6 +52,20 @@ struct Cbst *create_tree()
     return newTree;
 }
 
+int size_helper(struct Node *node)
+{
+    if (node == NULL)
+    {
+        return 0;
+    }
+    return 1 + size_helper(node->left) + size_helper(node->right);
+}
+
+int size(struct Cbst *tree)
+{
+    printf("size: %d\n", size_helper(tree->root));
+}
+
 void in_order_helper(struct Node *node)
 {
     if (node == NULL)
@@ -247,7 +261,7 @@ void segfault_handler(int signal_num)
     exit(1);
 }
 
-int dataNum = 2;
+int dataNum = 8;
 void insert_data(struct Cbst *tree, char c)
 {
 
@@ -339,6 +353,7 @@ int main()
     // pre_order(tree);
 
     printf("height: %d\n", get_height(tree->root));
+    size(tree);
 
     // insert_data(tree, 'c');
     // insert_data(tree, 'y');
