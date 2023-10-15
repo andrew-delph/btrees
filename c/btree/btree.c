@@ -250,7 +250,7 @@ int main()
     signal(SIGSEGV, segfault_handler);
     printf("started btree.\n");
 
-    struct Btree *tree = create_tree(10);
+    struct Btree *tree = create_tree(4);
 
     int num = 55;
     insert_data_ints(tree, num);
