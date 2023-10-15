@@ -16,7 +16,7 @@ struct Node
     int height;
 };
 
-struct Cbst
+struct Avl
 {
     struct Node *root;
 };
@@ -39,9 +39,9 @@ struct Node *create_node()
     return newNode;
 }
 
-struct Cbst *create_tree()
+struct Avl *create_tree()
 {
-    struct Cbst *newTree = (struct Cbst *)malloc(sizeof(struct Cbst));
+    struct Avl *newTree = (struct Avl *)malloc(sizeof(struct Avl));
     if (newTree == NULL)
     {
         // Handle memory allocation failure
@@ -61,7 +61,7 @@ int size_helper(struct Node *node)
     return 1 + size_helper(node->left) + size_helper(node->right);
 }
 
-int size(struct Cbst *tree)
+int size(struct Avl *tree)
 {
     printf("size: %d\n", size_helper(tree->root));
 }
@@ -77,7 +77,7 @@ void in_order_helper(struct Node *node)
     in_order_helper(node->right);
 }
 
-void in_order(struct Cbst *tree)
+void in_order(struct Avl *tree)
 {
     printf("in_order:");
     in_order_helper(tree->root);
@@ -95,7 +95,7 @@ void pre_order_helper(struct Node *node)
     pre_order_helper(node->right);
 }
 
-void pre_order(struct Cbst *tree)
+void pre_order(struct Avl *tree)
 {
     printf("pre_order:");
     pre_order_helper(tree->root);
@@ -208,7 +208,7 @@ struct Node *insert_node(struct Node *node, char key[], char value[])
     return node;
 }
 
-struct Node *insert(struct Cbst *tree, char key[], char value[])
+struct Node *insert(struct Avl *tree, char key[], char value[])
 {
     tree->root = insert_node(tree->root, key, value);
     return tree->root;
@@ -236,7 +236,7 @@ char *get_node(struct Node *node, char *key)
     }
 }
 
-char *get_value(struct Cbst *tree, char *key)
+char *get_value(struct Avl *tree, char *key)
 {
     return get_node(tree->root, key);
 }
@@ -252,7 +252,7 @@ void segfault_handler(int signal_num)
 }
 
 int dataNum = 3000;
-void insert_data(struct Cbst *tree, char c)
+void insert_data(struct Avl *tree, char c)
 {
 
     for (int i = 1; i <= dataNum; i++)
@@ -282,7 +282,7 @@ void fisherYatesShuffle(char *arr[], int n)
     }
 }
 
-void insert_data_ints(struct Cbst *tree)
+void insert_data_ints(struct Avl *tree)
 {
 
     char *keys[dataNum];
@@ -302,7 +302,7 @@ void insert_data_ints(struct Cbst *tree)
     }
 }
 
-void assert_data(struct Cbst *tree, char c)
+void assert_data(struct Avl *tree, char c)
 {
     for (int i = 1; i <= dataNum; i++)
     {
@@ -324,7 +324,7 @@ int main()
     signal(SIGSEGV, segfault_handler);
     printf("started.\n");
 
-    struct Cbst *tree = create_tree();
+    struct Avl *tree = create_tree();
 
     assert(get_value(tree, "test") == NULL);
 
