@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <signal.h>
 #include <stdlib.h>
+#include <assert.h>
 
 void segfault_handler(int signal_num)
 {
@@ -24,7 +25,7 @@ struct Node
 {
     struct Node *left;
     struct Node *right;
-    struct Item *items;
+    struct Items *items;
 };
 
 struct Btree
@@ -87,7 +88,6 @@ void sort_items(struct Items *items)
 
 struct Node *create_node()
 {
-
     struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
     if (newNode == NULL)
     {
@@ -123,6 +123,23 @@ struct Node *insert_node(struct Node *node, int n, char key[], char value[])
         node = create_node(n);
     }
 
+    if (items_length(node->items) < n)
+    {
+        items_append(node->items, key, value);
+    }
+    else
+    {
+        if (strcmp(key, node->items->items[0].key) < 0)
+        {
+            node->left = insert_node(node->left, n, key, value);
+        }
+        // else if (strcmp(key, node->items->items[n - 1].key) > 0)
+        else
+        {
+            node->right = insert_node(node->right, n, key, value);
+        }
+    }
+
     return node;
 }
 
@@ -132,6 +149,73 @@ struct Node *insert(struct Btree *tree, char key[], char value[])
     return tree->root;
 }
 
+// int dataNum = 3000;
+// void insert_data(struct Btree *tree, char c)
+// {
+
+//     for (int i = 1; i <= dataNum; i++)
+//     {
+//         char *str = (char *)malloc(i + 1);
+//         if (str == NULL)
+//         {
+//             printf("Memory allocation failed.\n");
+//             return;
+//         }
+//         memset(str, c, i);
+//         str[i] = '\0';
+//         insert(tree, str, str);
+//     }
+// }
+
+void fisherYatesShuffle(char *arr[], int n)
+{
+    srand(time(NULL));
+    for (int i = n - 1; i > 0; i--)
+    {
+        int j = rand() % (i + 1);
+        // Swap arr[i] and arr[j]
+        char *temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+}
+
+void insert_data_ints(struct Btree *tree, int num)
+{
+
+    char *keys[num];
+
+    // Initialize keys array with string values "0" to "100"
+    for (int i = 0; i < num; i++)
+    {
+        keys[i] = malloc(10);           // Allocate memory for the string
+        snprintf(keys[i], 10, "%d", i); // Convert integer to string
+    }
+
+    fisherYatesShuffle(keys, num);
+
+    for (int i = 0; i < num; i++)
+    {
+        insert(tree, keys[i], "x");
+    }
+}
+
+int size_helper(struct Node *node)
+{
+    if (node == NULL)
+    {
+        return 0;
+    }
+    // printf("size_helper %d\n", node->items->length);
+
+    return node->items->length + size_helper(node->left) + size_helper(node->right);
+}
+
+int size(struct Btree *tree)
+{
+    return size_helper(tree->root);
+}
+
 int main()
 {
     signal(SIGSEGV, segfault_handler);
@@ -139,36 +223,44 @@ int main()
 
     struct Btree *tree = create_tree(4);
 
-    struct Items *items = create_items();
+    // struct Items *items = create_items();
 
-    printf("len %d\n", items_length(items));
+    // printf("len %d\n", items_length(items));
 
-    items_append(items, "key1", "value1");
+    // items_append(items, "key1", "value1");
 
-    items_append(items, "key2", "value2");
+    // items_append(items, "key2", "value2");
 
-    items_append(items, "a", "value2");
+    // items_append(items, "a", "value2");
 
-    items_append(items, "c", "value2");
+    // items_append(items, "c", "value2");
 
-    items_append(items, "b", "value2");
+    // items_append(items, "b", "value2");
 
-    printf("len %d\n", items_length(items));
+    // printf("len %d\n", items_length(items));
 
-    for (int i = 0; i < items_length(items); i++)
-    {
-        printf("Item %d: key = %s\n", i, items->items[i].key);
-    }
+    // for (int i = 0; i < items_length(items); i++)
+    // {
+    //     printf("Item %d: key = %s\n", i, items->items[i].key);
+    // }
 
-    sort_items(items);
+    // sort_items(items);
 
-    printf("\nsorted.\n\n");
+    // printf("\nsorted.\n\n");
 
-    for (int i = 0; i < items_length(items); i++)
-    {
-        printf("Item %d: key = %s\n", i, items->items[i].key);
-    }
+    // for (int i = 0; i < items_length(items); i++)
+    // {
+    //     printf("Item %d: key = %s\n", i, items->items[i].key);
+    // }
 
+    int num = 200;
+    insert_data_ints(tree, num);
+
+    printf("inserted data.\n");
+
+    int count = size(tree);
+    printf("count: %d\n", count);
+    assert(num == count);
     printf("\nDONE.\n");
 
     return 0;
