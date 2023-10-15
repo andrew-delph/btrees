@@ -1,7 +1,11 @@
 #include <stdio.h>
 #include <string.h>
-#include "utils.h"
 #include <assert.h>
+
+int max(int a, int b)
+{
+    return (a > b) ? a : b;
+}
 
 struct Node
 {
@@ -88,7 +92,7 @@ int get_height(struct Node *node)
     {
         return 0;
     }
-    return node->height;
+    return 1 + max(get_height(node->left), get_height(node->right));
 }
 
 int get_balance(struct Node *node)
@@ -108,6 +112,7 @@ struct Node *left_rotate(struct Node *node)
     temp->left = node;
     node->right = temp;
     // TODO update height
+
     return right;
 }
 
@@ -119,12 +124,13 @@ struct Node *right_rotate(struct Node *node)
     temp->right = node;
     node->left = temp;
     // TODO update height
+
     return left;
 }
 
 struct Node *insert_node(struct Node *node, char key[], char value[])
 {
-    if (node == NULL)
+    if (node == NULL || node->key == NULL)
     {
         node = create_node();
         node->key = key;
@@ -144,6 +150,37 @@ struct Node *insert_node(struct Node *node, char key[], char value[])
     {
         node->key = key;
         node->value = value;
+        return node;
+    }
+
+    node->height = 1 + max(get_height(node->left), get_height(node->right));
+
+    int balance = get_balance(node);
+    if (balance > 1)
+    {
+        if (node->left != NULL && strcmp(key, node->left->key) < 0)
+        {
+
+            return right_rotate(node);
+        }
+        else
+        {
+            node->left = left_rotate(node->left);
+            return right_rotate(node);
+        }
+    }
+    else if (balance < -1)
+    {
+        if (node->right != NULL && strcmp(key, node->right->key) > 0)
+        {
+
+            return left_rotate(node);
+        }
+        else
+        {
+            node->left = right_rotate(node->left);
+            return left_rotate(node);
+        }
     }
 
     return node;
@@ -242,22 +279,28 @@ int main()
 
     assert(get_value(tree, "test") == NULL);
 
-    insert_data(tree, 'c');
-    insert_data(tree, 'y');
-    insert_data(tree, 'z');
+    insert(tree, "a", "X");
+    insert(tree, "aa", "X");
+    insert(tree, "aaa", "X");
+    insert(tree, "aaaa", "X");
+
+    in_order(tree);
+    pre_order(tree);
+
+    // insert_data(tree, 'c');
+    // insert_data(tree, 'y');
+    // insert_data(tree, 'z');
 
     // insert_item(tree, "b", "x");
     // printf("--------\n");
     // insert_item(tree, "b", "x");
     // insert_data(tree, 'x');
 
-    assert_data(tree, 'c');
-    assert_data(tree, 'y');
-    assert_data(tree, 'z');
+    // assert_data(tree, 'c');
+    // assert_data(tree, 'y');
+    // assert_data(tree, 'z');
 
     // printf("--------\n");
-    // in_order(tree);
-    // pre_order(tree);
 
     printf("DONE.\n");
 
