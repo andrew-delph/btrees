@@ -23,6 +23,7 @@ struct Cbst
 
 struct Node *create_node()
 {
+
     struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
     if (newNode == NULL)
     {
@@ -107,7 +108,9 @@ int get_balance(struct Node *node)
 
 struct Node *left_rotate(struct Node *node)
 {
-    printf("left balance %d %d\n", get_balance(node), node->right != NULL);
+    printf("left balance\n");
+    // struct Node *right = node->right;
+    // struct Node *temp = right->left;
     struct Node *right = (node->right != NULL) ? node->right : create_node(node);
     struct Node *temp = (right->left != NULL) ? right->left : create_node(right);
     temp->left = node;
@@ -121,7 +124,9 @@ struct Node *left_rotate(struct Node *node)
 
 struct Node *right_rotate(struct Node *node)
 {
-    printf("left balance %d %d\n", get_balance(node), node->right != NULL);
+    printf("left balance\n");
+    // struct Node *left = node->left;
+    // struct Node *temp = left->right;
     struct Node *left = (node->left != NULL) ? node->left : create_node(node);
     struct Node *temp = (left->right != NULL) ? left->right : create_node(left);
     temp->right = node;
@@ -163,7 +168,8 @@ struct Node *insert_node(struct Node *node, char key[], char value[])
     int balance = get_balance(node);
     if (balance > 1)
     {
-        if (node->left != NULL && strcmp(key, node->left->key) < 0)
+        printf("null? %d\n", node->left->key);
+        if (strcmp(key, node->left->key) < 0)
         {
 
             return right_rotate(node);
@@ -174,34 +180,36 @@ struct Node *insert_node(struct Node *node, char key[], char value[])
             return right_rotate(node);
         }
     }
-    else if (balance < -1)
-    {
-        if (node->right != NULL && strcmp(key, node->right->key) > 0)
-        {
+    // else if (balance < -1)
+    // {
+    //     if (strcmp(key, node->right->key) > 0)
+    //     {
 
-            return left_rotate(node);
-        }
-        else
-        {
-            node->left = right_rotate(node->left);
-            return left_rotate(node);
-        }
-    }
+    //         return left_rotate(node);
+    //     }
+    //     else
+    //     {
+    //         node->left = right_rotate(node->left);
+    //         return left_rotate(node);
+    //     }
+    // }
 
     return node;
 }
 
 struct Node *insert(struct Cbst *tree, char key[], char value[])
 {
-    if (tree->root == NULL)
-    {
-        tree->root = create_node();
-        tree->root->key = key;
-        tree->root->value = value;
-        return tree->root;
-    }
+    // if (tree->root == NULL)
+    // {
+    //     tree->root = create_node();
+    //     tree->root->key = key;
+    //     tree->root->value = value;
+    //     return tree->root;
+    // }
 
-    return insert_node(tree->root, key, value);
+    tree->root = insert_node(tree->root, key, value);
+
+    return tree->root;
 }
 
 char *get_node(struct Node *node, char *key)
@@ -258,6 +266,39 @@ void insert_data(struct Cbst *tree, char c)
     }
 }
 
+void fisherYatesShuffle(char *arr[], int n)
+{
+    srand(time(NULL));
+    for (int i = n - 1; i > 0; i--)
+    {
+        int j = rand() % (i + 1);
+        // Swap arr[i] and arr[j]
+        char *temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+}
+
+void insert_data_ints(struct Cbst *tree)
+{
+
+    char *keys[101];
+
+    // Initialize keys array with string values "0" to "100"
+    for (int i = 0; i < dataNum; i++)
+    {
+        keys[i] = malloc(4);           // Allocate memory for the string
+        snprintf(keys[i], 4, "%d", i); // Convert integer to string
+    }
+
+    fisherYatesShuffle(keys, 101);
+
+    for (int i = 0; i <= 100; i++)
+    {
+        insert(tree, keys[i], "x");
+    }
+}
+
 void assert_data(struct Cbst *tree, char c)
 {
     for (int i = 1; i <= dataNum; i++)
@@ -284,17 +325,21 @@ int main()
 
     assert(get_value(tree, "test") == NULL);
 
-    insert(tree, "2", "X");
-    insert(tree, "3", "X");
-    insert(tree, "4", "X");
-    insert(tree, "1", "X");
-    insert(tree, "aa", "X");
-    insert(tree, "a", "X");
+    // insert(tree, "2", "X");
+    // insert(tree, "3", "X");
+    // insert(tree, "4", "X");
+    // insert(tree, "1", "X");
+    // insert(tree, "aa", "X");
+    // insert(tree, "a", "X");
 
-    get_height(tree->root);
+    insert_data_ints(tree);
+
+    // insert_data(tree, 'c');
 
     in_order(tree);
-    pre_order(tree);
+    // pre_order(tree);
+
+    printf("height: %d\n", get_height(tree->root));
 
     // insert_data(tree, 'c');
     // insert_data(tree, 'y');
