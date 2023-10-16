@@ -112,18 +112,6 @@ void print_items(struct Item *items, int length)
     printf("\n");
 }
 
-// void in_order_helper(struct Node *node)
-// {
-//     if (node == NULL)
-//     {
-//         return;
-//     }
-
-//     in_order_helper(node->left);
-//     print_node(node);
-//     in_order_helper(node->right);
-// }
-
 struct Node *insert_node(struct Node *node, char key[], char value[])
 {
     if (node == NULL)
@@ -191,6 +179,18 @@ struct Node *insert_data_ints(struct Node *root, int lower, int upper)
     }
     return root;
 }
+
+// void in_order_helper(struct Node *node)
+// {
+//     if (node == NULL)
+//     {
+//         return;
+//     }
+
+//     in_order_helper(node->left);
+//     print_node(node);
+//     in_order_helper(node->right);
+// }
 
 // int size_helper(struct Node *node)
 // {
