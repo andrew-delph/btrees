@@ -30,30 +30,6 @@ struct Node
     struct Item *items;
 };
 
-void items_append(struct Node *node, const char *key, const char *value)
-{
-    int new_length = node->length + 1;
-    struct Item *new_items = (struct Item *)realloc(node->items, new_length * sizeof(struct Item));
-    if (new_items == NULL)
-    {
-        // Handle memory allocation failure
-        printf("Memory allocation failed!\n");
-        exit(1);
-    }
-
-    new_items[new_length - 1].key = strdup(key);
-    new_items[new_length - 1].value = strdup(value);
-
-    node->items = new_items;
-    node->length = new_length;
-}
-
-// Function to get the length of the Items structure
-int items_length(const struct Node *node)
-{
-    return node->length;
-}
-
 struct Node *create_node(int leaf)
 {
     struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
@@ -70,12 +46,70 @@ struct Node *create_node(int leaf)
     return newNode;
 }
 
-void print_node(struct Node *node)
+struct Item *items_insert(struct Item *items, int length, const char *key, const char *value)
 {
-    for (int i = 0; i < items_length(node->items); i++)
+    int new_length = length + 1;
+    struct Item *new_items = (struct Item *)realloc(items, new_length * sizeof(struct Item));
+    if (new_items == NULL)
     {
-        printf(" %s", node->items[i].key);
+        // Handle memory allocation failure
+        printf("Memory allocation failed!\n");
+        exit(1);
     }
+
+    int i = length - 1;
+    while (i >= 0)
+    {
+        int comp = strcmp(key, new_items[i].key);
+        int found = comp > 0;
+        if (found)
+        {
+            break;
+        }
+        new_items[i + 1].key = new_items[i].key;
+        new_items[i + 1].value = new_items[i].value;
+        i--;
+    }
+
+    int index = i + 1;
+    new_items[index].key = key;
+    new_items[index].value = value;
+
+    return new_items;
+}
+
+// Function to get the length of the Items structure
+int items_length(const struct Node *node)
+{
+    return node->length;
+}
+
+void test_items()
+{
+    printf("test_items\n");
+    struct Item *items = NULL;
+    items = items_insert(items, 0, "b", "bb");
+    print_items(items, 1);
+
+    items = items_insert(items, 1, "c", "cc");
+    print_items(items, 2);
+
+    items = items_insert(items, 2, "d", "dd");
+    print_items(items, 3);
+
+    items = items_insert(items, 3, "a", "aa");
+    print_items(items, 4);
+    // items = items_insert(items, 0, 2, "key4", "value4");
+    // print_items(items, 3);
+}
+
+void print_items(struct Item *items, int length)
+{
+    for (int i = 0; i < length; i++)
+    {
+        printf(" [%s]", items[i].key);
+    }
+    printf("\n");
 }
 
 // void in_order_helper(struct Node *node)
@@ -153,7 +187,6 @@ struct Node *insert_data_ints(struct Node *root, int lower, int upper)
 
     for (int i = 0; i < num; i++)
     {
-        printf("key = %s\n", keys[i]);
         root = insert_node(root, keys[i], "x");
     }
     return root;
@@ -185,6 +218,8 @@ int main()
 {
     signal(SIGSEGV, segfault_handler);
     printf("started btree.\n");
+
+    test_items();
 
     struct Node *root = create_node(1);
 
