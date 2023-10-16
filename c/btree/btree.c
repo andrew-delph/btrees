@@ -114,14 +114,67 @@ void print_items(struct Item *items, int length)
     printf("\n");
 }
 
+void split_child(struct Node *node, int index)
+{
+    printf("split_child index = %d\n", index);
+    printf("xlen1: %d\n", node->length);
+    struct Node *child = &node->children[0];
+    struct Node *parent = create_node(child->leaf);
+    node->children[index] = *parent;
+    node->items[index] = child->items[0];
+
+    items_insert(&node->items, &node->length, "test1", "tszzz");
+    items_insert(&node->items, &node->length, "test2", "tszzz");
+    items_insert(&node->items, &node->length, "test3", "tszzz");
+    // items_insert(&node->items, &node->length, "test4", "tszzz");
+
+    printf("xlen2: %d\n", node->length);
+    printf("child leaf: %d\n", child->leaf);
+}
+
+void insert_non_full(struct Node *node, char key[], char value[])
+{
+    int i = node->length - 1;
+
+    if (node->leaf)
+    {
+        printf("LEAF!\n");
+        printf("len1: %d\n", node->length);
+        items_insert(&node->items, &node->length, key, value);
+        printf("len2: %d\n", node->length);
+    }
+    else
+    {
+        printf("NON-LEAF!\n");
+        int i = (node->length - 1);
+        printf("len3: %d\n", node->length);
+        while (i >= 0 && strcmp(key, node->items[i].key) > 0)
+        {
+            i--;
+        }
+        i++;
+        if (node->children[i].length == (2 * T) - 1)
+        {
+            split_child(node, i);
+            printf("len4: %d\n", node->length);
+            if (strcmp(key, node->items[i].key) > 0)
+            {
+                i++;
+            }
+        }
+        insert_non_full(&node->children[i], key, value);
+    }
+}
+
 struct Node *insert(struct Node *root, char key[], char value[])
 {
+    printf("\n----insert!\n");
     if (root == NULL)
     {
         root = create_node(1);
     }
 
-    if (root->length == 0)
+    if (root->length == T)
     {
         struct Node *temp = create_node(0);
         temp->children[0] = *root;
@@ -134,24 +187,6 @@ struct Node *insert(struct Node *root, char key[], char value[])
         insert_non_full(root, key, value);
         return root;
     }
-}
-
-void insert_non_full(struct Node *node, char key[], char value[])
-{
-    // insert to node
-
-    // if node is over size. split
-
-    return node;
-}
-
-void split_child(struct Node *node, int index)
-{
-    // insert to node
-
-    // if node is over size. split
-
-    return node;
 }
 
 void fisherYatesShuffle(char **array, int size)
@@ -251,7 +286,7 @@ int main()
 
     struct Node *root = create_node(1);
 
-    root = insert_data_ints(root, 0, 3);
+    root = insert_data_ints(root, 0, 15);
 
     printf("null? %d\n", root == NULL);
 
