@@ -112,13 +112,22 @@ void print_items(struct Item *items, int length)
     printf("\n");
 }
 
-struct Node *insert_node(struct Node *node, char key[], char value[])
+struct Node *insert(struct Node *root, char key[], char value[])
 {
-    if (node == NULL)
+    if (root == NULL)
     {
-        node = create_node(0);
+        root = create_node(0);
     }
 
+    // insert to node
+
+    // if node is over size. split
+
+    return root;
+}
+
+struct Node *insert_non_full(struct Node *node, char key[], char value[])
+{
     // insert to node
 
     // if node is over size. split
@@ -175,7 +184,7 @@ struct Node *insert_data_ints(struct Node *root, int lower, int upper)
 
     for (int i = 0; i < num; i++)
     {
-        root = insert_node(root, keys[i], "x");
+        root = insert(root, keys[i], "x");
     }
     return root;
 }

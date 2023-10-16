@@ -150,7 +150,7 @@ struct Node *right_rotate(struct Node *node)
     return left;
 }
 
-struct Node *insert_node(struct Node *node, char key[], char value[])
+struct Node *insert(struct Node *node, char key[], char value[])
 {
     if (node == NULL || node->key == NULL)
     {
@@ -162,11 +162,11 @@ struct Node *insert_node(struct Node *node, char key[], char value[])
     int comp = strcmp(key, node->key);
     if (comp > 0)
     {
-        node->right = insert_node(node->right, key, value);
+        node->right = insert(node->right, key, value);
     }
     else if (comp < 0)
     {
-        node->left = insert_node(node->left, key, value);
+        node->left = insert(node->left, key, value);
     }
     else
     {
@@ -210,7 +210,7 @@ struct Node *insert_node(struct Node *node, char key[], char value[])
 
 struct Node *insert(struct Avl *tree, char key[], char value[])
 {
-    tree->root = insert_node(tree->root, key, value);
+    tree->root = insert(tree->root, key, value);
     return tree->root;
 }
 
