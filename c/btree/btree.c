@@ -40,7 +40,7 @@ struct Node *create_node(int leaf)
         exit(1);
     }
 
-    newNode->children = NULL;
+    newNode->children = (struct Node *)malloc(T * sizeof(struct Node));
     newNode->items = NULL;
     newNode->leaf = leaf;
     return newNode;
@@ -118,17 +118,34 @@ struct Node *insert(struct Node *root, char key[], char value[])
 {
     if (root == NULL)
     {
-        root = create_node(0);
+        root = create_node(1);
     }
 
+    if (root->length == 0)
+    {
+        struct Node *temp = create_node(0);
+        temp->children[0] = *root;
+        split_child(temp, 0);
+        insert_non_full(temp, key, value);
+        return temp;
+    }
+    else
+    {
+        insert_non_full(root, key, value);
+        return root;
+    }
+}
+
+void insert_non_full(struct Node *node, char key[], char value[])
+{
     // insert to node
 
     // if node is over size. split
 
-    return root;
+    return node;
 }
 
-struct Node *insert_non_full(struct Node *node, char key[], char value[])
+void split_child(struct Node *node, int index)
 {
     // insert to node
 
@@ -230,11 +247,18 @@ int main()
     signal(SIGSEGV, segfault_handler);
     printf("started btree.\n");
 
-    test_items();
+    // test_items();
 
     struct Node *root = create_node(1);
 
-    root = insert_data_ints(root, 0, 100);
+    root = insert_data_ints(root, 0, 3);
+
+    printf("null? %d\n", root == NULL);
+
+    printf("root->leaf? %d\n", (root->leaf));
+
+    printf("root->children[0].leaf? %d\n", (root->children[0].leaf));
+    printf("root->children[0].children[0].leaf? %d\n", (root->children[0].children[0].leaf));
 
     // printf("inserted data.\n\n");
 
