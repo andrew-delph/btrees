@@ -104,33 +104,52 @@ struct Node *insert_node(struct Node *node, char key[], char value[])
     return node;
 }
 
-void fisherYatesShuffle(char *arr[], int n)
+void fisherYatesShuffle(char **array, int size)
 {
-    srand(time(NULL));
-    for (int i = n - 1; i > 0; i--)
+    for (int i = size - 1; i > 0; i--)
     {
         int j = rand() % (i + 1);
-        // Swap arr[i] and arr[j]
-        char *temp = arr[i];
-        arr[i] = arr[j];
-        arr[j] = temp;
+        char *temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
     }
 }
 
-struct Node *insert_data_ints(struct Node *root, int lower, int upper)
+char **generate_keys(int lower, int upper)
 {
     int num = upper - lower;
-    char *keys[num];
+    char **keys = (char **)malloc(num * sizeof(char *));
+
+    if (keys == NULL)
+    {
+        fprintf(stderr, "Memory allocation failed.\n");
+        exit(1);
+    }
 
     // Initialize keys array with string values "0" to "100"
     for (int i = 0; i < num; i++)
     {
         int id = lower + i;
-        keys[i] = malloc(10);            // Allocate memory for the string
+        keys[i] = (char *)malloc(10); // Allocate memory for the string
+
+        if (keys[i] == NULL)
+        {
+            fprintf(stderr, "Memory allocation failed.\n");
+            exit(1);
+        }
+
         snprintf(keys[i], 10, "%d", id); // Convert integer to string
     }
 
     fisherYatesShuffle(keys, num);
+
+    return keys;
+}
+
+struct Node *insert_data_ints(struct Node *root, int lower, int upper)
+{
+    int num = upper - lower;
+    char **keys = generate_keys(lower, upper);
 
     for (int i = 0; i < num; i++)
     {
@@ -169,7 +188,6 @@ int main()
 
     struct Node *root = create_node(1);
 
-    int num = 10;
     root = insert_data_ints(root, 0, 100);
 
     // printf("inserted data.\n\n");
