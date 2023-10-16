@@ -46,36 +46,37 @@ struct Node *create_node(int leaf)
     return newNode;
 }
 
-struct Item *items_insert(struct Item *items, int length, const char *key, const char *value)
+void items_insert(struct Item **items, int *length, const char *key, const char *value)
 {
-    int new_length = length + 1;
-    struct Item *new_items = (struct Item *)realloc(items, new_length * sizeof(struct Item));
-    if (new_items == NULL)
+    // Increase the length of the array
+    (*length)++;
+
+    // Reallocate memory to accommodate the new item
+    *items = (struct Item *)realloc(*items, (*length) * sizeof(struct Item));
+
+    if (*items == NULL)
     {
-        // Handle memory allocation failure
-        printf("Memory allocation failed!\n");
+        fprintf(stderr, "Memory allocation failed.\n");
         exit(1);
     }
 
-    int i = length - 1;
+    int i = (*length) - 2;
     while (i >= 0)
     {
-        int comp = strcmp(key, new_items[i].key);
+        int comp = strcmp(key, (*items)[i].key);
         int found = comp > 0;
         if (found)
         {
             break;
         }
-        new_items[i + 1].key = new_items[i].key;
-        new_items[i + 1].value = new_items[i].value;
+        (*items)[i + 1].key = (*items)[i].key;
+        (*items)[i + 1].value = (*items)[i].value;
         i--;
     }
 
     int index = i + 1;
-    new_items[index].key = key;
-    new_items[index].value = value;
-
-    return new_items;
+    (*items)[index].key = key;
+    (*items)[index].value = value;
 }
 
 // Function to get the length of the Items structure
@@ -88,16 +89,17 @@ void test_items()
 {
     printf("test_items\n");
     struct Item *items = NULL;
-    items = items_insert(items, 0, "b", "bb");
+    int length = 0;
+    items_insert(&items, &length, "b", "bb");
     print_items(items, 1);
 
-    items = items_insert(items, 1, "c", "cc");
+    items_insert(&items, &length, "c", "cc");
     print_items(items, 2);
 
-    items = items_insert(items, 2, "d", "dd");
+    items_insert(&items, &length, "d", "dd");
     print_items(items, 3);
 
-    items = items_insert(items, 3, "a", "aa");
+    items_insert(&items, &length, "a", "aa");
     print_items(items, 4);
     // items = items_insert(items, 0, 2, "key4", "value4");
     // print_items(items, 3);
