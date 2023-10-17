@@ -133,10 +133,10 @@ void split_child(struct Node *node, int index)
     parent->length = T;
     for (int i = 0; i < T; i++)
     {
-        child->items[i] = child->items[T + i];
+        child->items[i] = child->items[i];
     }
     child->length = T;
-    if (child->leaf == 1)
+    if (child->leaf == 0)
     {
         printf("child is a leaf!\n");
         for (int i = 0; i <= T; i++)
