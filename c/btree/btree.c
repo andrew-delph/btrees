@@ -148,7 +148,6 @@ void split_child(struct Node *node, int index)
     struct Node *parent = create_node(child->leaf);
     node->children[index + 1] = *parent;
     node->items[index] = child->items[T - 1];
-    node->length = index;
     for (int i = 0; i < T - 1; i++)
     {
         parent->items[i] = child->items[T + i];
@@ -172,34 +171,28 @@ void split_child(struct Node *node, int index)
         }
     }
 
-    printf("\nchild items: %d\n", child->leaf);
+    printf("\nchild items: child=%d len=%d\n", child->leaf, child->length);
     print_items(child->items, child->length);
-    printf("\n");
 
-    printf("\nparent items: %d\n", parent->leaf);
+    printf("\nparent items: child=%d len=%d\n", parent->leaf, parent->length);
     print_items(parent->items, parent->length);
-    printf("\n");
 
-    printf("\nnode items: %d\n", node->leaf);
+    printf("\nnode items: child=%d len=%d\n", node->leaf, node->length);
     print_items(node->items, node->length);
-    printf("\n");
 
-    printf("\n\n---------------SPLIT-TRAVERSE---------------\n");
-    traverse(node, 0);
+    // printf("\n\n---------------SPLIT-TRAVERSE---------------\n");
+    // traverse(node, 0);
+
     printf("\n");
-    // printf("child leaf: %d\n", child->leaf);
 }
 
 void insert_non_full(struct Node *node, char key[], char value[])
 {
-    int i = node->length - 1;
 
     if (node->leaf)
     {
-        printf("LEAF!\n");
-        printf("1leaf len: %d key=%s\n", node->length, key);
+        printf("LEAF! len: %d key=%s\n", node->length, key);
         items_insert(&node->items, &node->length, key, value);
-        printf("2leaf len: %d\n", node->length);
     }
     else
     {
@@ -219,6 +212,7 @@ void insert_non_full(struct Node *node, char key[], char value[])
                 i++;
             }
         }
+        printf("insert child: %d\n", i);
         insert_non_full(&node->children[i], key, value);
     }
     printf("inf done.\n");
@@ -309,28 +303,6 @@ struct Node *insert_data_ints(struct Node *root, int lower, int upper, int shuff
     return root;
 }
 
-// int size_helper(struct Node *node)
-// {
-//     if (node == NULL)
-//     {
-//         return 0;
-//     }
-//     // printf("size_helper %d\n", node->items->length);
-
-//     return node->items->length + size_helper(node->left) + size_helper(node->right);
-// }
-
-// int height_helper(struct Node *node)
-// {
-//     if (node == NULL)
-//     {
-//         return 0;
-//     }
-//     // printf("size_helper %d\n", node->items->length);
-
-//     return 1 + max(height_helper(node->left), height_helper(node->right));
-// }
-
 int main()
 {
     signal(SIGSEGV, segfault_handler);
@@ -338,7 +310,7 @@ int main()
 
     // test_items();
     int count;
-    struct Node *root = create_node(1);
+    struct Node *root = NULL;
 
     root = insert_data_ints(root, 0, 8, 0);
 
@@ -351,18 +323,6 @@ int main()
     printf("\n\n---------------TRAVERSE---------------\n");
     count = traverse(root, 0);
     printf("\ncount: %d", count);
-
-    // printf("inserted data.\n\n");
-
-    // printf("in_order: ");
-    // in_order_helper(root);
-    // printf("\n\n");
-
-    // int size = size_helper(root);
-    // printf("size: %d\n", size);
-
-    // int height = height_helper(root);
-    // printf("height: %d\n", height);
 
     // assert(num == size);
     printf("\nDONE.\n");
