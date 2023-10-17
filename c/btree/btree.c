@@ -159,6 +159,7 @@ void split_child(struct Node *node, int index)
     }
     child->length = T - 1;
     node->length++;
+    printf("child is leaf: %d\n", child->leaf);
     if (child->leaf == 0)
     {
         for (int i = 0; i < T; i++)
