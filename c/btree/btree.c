@@ -116,18 +116,20 @@ void print_items(struct Item *items, int length)
     printf("\n");
 }
 
-void traverse(struct Node *node, int level)
+int traverse(struct Node *node, int level)
 {
     if (node == NULL || node->length == 0)
     {
-        return;
+        return 0;
     }
+    int count = node->length;
     printf("t(%d)|  ", level);
     print_items(node->items, node->length);
     for (int i = 0; i < node->length + 1; i++)
     {
-        traverse(&node->children[i], level + 1);
+        count += traverse(&node->children[i], level + 1);
     }
+    return count;
 }
 
 void split_child(struct Node *node, int index)
@@ -147,8 +149,10 @@ void split_child(struct Node *node, int index)
         child->items[i] = child->items[i];
     }
     child->length = T - 1;
-    printf("child.  leaf %d len %d\n", child->leaf, child->length);
-    print_items(child->items, child->length);
+    // printf("child.  leaf %d len %d\n", child->leaf, child->length);
+    // printf("split node len: %d\n", node->length);
+    // print_items(node->items, node->length);
+    node->length++;
     if (child->leaf == 0)
     {
         for (int i = 0; i < T; i++)
@@ -237,7 +241,7 @@ void fisherYatesShuffle(char **array, int size)
     }
 }
 
-char **generate_keys(int lower, int upper)
+char **generate_keys(int lower, int upper, int shuffle)
 {
     int num = upper - lower;
     char **keys = (char **)malloc(num * sizeof(char *));
@@ -263,15 +267,18 @@ char **generate_keys(int lower, int upper)
         snprintf(keys[i], 10, "%d", id); // Convert integer to string
     }
 
-    fisherYatesShuffle(keys, num);
+    if (shuffle)
+    {
+        fisherYatesShuffle(keys, num);
+    }
 
     return keys;
 }
 
-struct Node *insert_data_ints(struct Node *root, int lower, int upper)
+struct Node *insert_data_ints(struct Node *root, int lower, int upper, int shuffle)
 {
     int num = upper - lower;
-    char **keys = generate_keys(lower, upper);
+    char **keys = generate_keys(lower, upper, shuffle);
 
     for (int i = 0; i < num; i++)
     {
@@ -309,19 +316,20 @@ int main()
     printf("started btree.\n");
 
     // test_items();
-
+    int count;
     struct Node *root = create_node(1);
 
-    root = insert_data_ints(root, 0, 3);
+    root = insert_data_ints(root, 0, 8, 0);
 
     printf("\n\n---------------TRAVERSE---------------\n");
-    traverse(root, 0);
+    count = traverse(root, 0);
+    printf("\ncount: %d", count);
     printf("\n\n");
 
-    root = insert(root, "3", "x");
-
+    root = insert(root, "8", "x");
     printf("\n\n---------------TRAVERSE---------------\n");
-    traverse(root, 0);
+    count = traverse(root, 0);
+    printf("\ncount: %d", count);
 
     // printf("inserted data.\n\n");
 
