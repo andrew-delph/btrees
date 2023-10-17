@@ -134,11 +134,21 @@ int traverse(struct Node *node, int level)
 
 void split_child(struct Node *node, int index)
 {
+
     struct Node *child = &node->children[index];
+    // printf("\n>>node items: %d\n", node->leaf);
+    // print_items(node->items, node->length);
+    // printf("\n");
+
+    // printf("\n>>child items: %d\n", child->leaf);
+    // print_items(child->items, child->length);
+    // printf("\n");
+
     printf("split_child index = %d length = %d key = %s\n", index, child->length, child->items[T - 1].key);
     struct Node *parent = create_node(child->leaf);
     node->children[index + 1] = *parent;
     node->items[index] = child->items[T - 1];
+    node->length = index;
     for (int i = 0; i < T - 1; i++)
     {
         parent->items[i] = child->items[T + i];
@@ -149,9 +159,6 @@ void split_child(struct Node *node, int index)
         child->items[i] = child->items[i];
     }
     child->length = T - 1;
-    // printf("child.  leaf %d len %d\n", child->leaf, child->length);
-    // printf("split node len: %d\n", node->length);
-    // print_items(node->items, node->length);
     node->length++;
     if (child->leaf == 0)
     {
@@ -165,7 +172,21 @@ void split_child(struct Node *node, int index)
         }
     }
 
-    printf("------------------------------------>LEN: %d %s\n", child->length, child->items[2].key);
+    printf("\nchild items: %d\n", child->leaf);
+    print_items(child->items, child->length);
+    printf("\n");
+
+    printf("\nparent items: %d\n", parent->leaf);
+    print_items(parent->items, parent->length);
+    printf("\n");
+
+    printf("\nnode items: %d\n", node->leaf);
+    print_items(node->items, node->length);
+    printf("\n");
+
+    printf("\n\n---------------SPLIT-TRAVERSE---------------\n");
+    traverse(node, 0);
+    printf("\n");
     // printf("child leaf: %d\n", child->leaf);
 }
 
@@ -218,7 +239,7 @@ struct Node *insert(struct Node *root, char key[], char value[])
         struct Node *temp = create_node(0);
         temp->children[0] = *root;
         split_child(temp, 0);
-        temp->length = 1;
+        // temp->length = 1;
 
         insert_non_full(temp, key, value);
         return temp;
