@@ -87,6 +87,15 @@ int items_length(const struct Node *node)
     return node->length;
 }
 
+void print_items(struct Item *items, int length)
+{
+    for (int i = 0; i < length; i++)
+    {
+        printf(" [%s]", items[i].key);
+    }
+    printf("\n");
+}
+
 void test_items()
 {
     printf("test_items\n");
@@ -107,27 +116,38 @@ void test_items()
     // print_items(items, 3);
 }
 
-void print_items(struct Item *items, int length)
-{
-    for (int i = 0; i < length; i++)
-    {
-        printf(" [%s]", items[i].key);
-    }
-    printf("\n");
-}
-
 void split_child(struct Node *node, int index)
 {
 
     // printf("xlen1: %d\n", node->length);
     struct Node *child = &node->children[index];
     printf("split_child index = %d length = %d\n", index, child->length);
-    exit(1);
     struct Node *parent = create_node(child->leaf);
     // printf("child len: %d\n", child->length);
     node->children[index + 1] = *parent;
     node->items[index] = child->items[0];
-
+    for (int i = 0; i < T; i++)
+    {
+        parent->items[i] = child->items[T + i];
+    }
+    parent->length = T;
+    for (int i = 0; i < T; i++)
+    {
+        child->items[i] = child->items[T + i];
+    }
+    child->length = T;
+    if (child->leaf == 1)
+    {
+        printf("child is a leaf!\n");
+        for (int i = 0; i <= T; i++)
+        {
+            parent->children[i] = child->children[T + i];
+        }
+        for (int i = 0; i < T; i++)
+        {
+            child->children[i] = child->children[i];
+        }
+    }
     // printf("xlen2: %d\n", node->length);
     // printf("child leaf: %d\n", child->leaf);
 }
