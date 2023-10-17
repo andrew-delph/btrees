@@ -119,13 +119,11 @@ void test_items()
 void split_child(struct Node *node, int index)
 {
 
-    // printf("xlen1: %d\n", node->length);
     struct Node *child = &node->children[index];
     printf("split_child index = %d length = %d\n", index, child->length);
     struct Node *parent = create_node(child->leaf);
-    // printf("child len: %d\n", child->length);
     node->children[index + 1] = *parent;
-    node->items[index] = child->items[0];
+    node->items[index] = child->items[T - 1];
     for (int i = 0; i < T; i++)
     {
         parent->items[i] = child->items[T + i];
@@ -165,12 +163,12 @@ void insert_non_full(struct Node *node, char key[], char value[])
     {
         printf("NON-LEAF!\n");
         int i = (node->length - 1);
-        while (i >= 0 && strcmp(key, node->items[i].key) > 0)
+        while (i >= 0 && strcmp(key, node->items[i].key) < 0)
         {
             i--;
         }
         i++;
-        if (node->children[i].length >= (2 * T) - 1)
+        if (node->children[i].length == (2 * T) - 1)
         {
             split_child(node, i);
             if (strcmp(key, node->items[i].key) > 0)
@@ -197,7 +195,9 @@ struct Node *insert(struct Node *root, char key[], char value[])
         struct Node *temp = create_node(0);
         temp->children[0] = *root;
         split_child(temp, 0);
+        temp->length = 1;
         insert_non_full(temp, key, value);
+        printf("root len: %d.\n", temp->length);
         return temp;
     }
     else
@@ -262,17 +262,20 @@ struct Node *insert_data_ints(struct Node *root, int lower, int upper)
     return root;
 }
 
-// void in_order_helper(struct Node *node)
-// {
-//     if (node == NULL)
-//     {
-//         return;
-//     }
-
-//     in_order_helper(node->left);
-//     print_node(node);
-//     in_order_helper(node->right);
-// }
+void traverse(struct Node *node)
+{
+    if (node == NULL || node->length == 0)
+    {
+        return;
+    }
+    printf("t:");
+    print_items(node->items, node->length);
+    printf("-len: %d\n", node->length);
+    for (int i = 0; i < node->length; i++)
+    {
+        traverse(&node->children[i]);
+    }
+}
 
 // int size_helper(struct Node *node)
 // {
@@ -305,7 +308,10 @@ int main()
 
     struct Node *root = create_node(1);
 
-    root = insert_data_ints(root, 0, 1000);
+    root = insert_data_ints(root, 0, 8);
+
+    printf("---\n");
+    traverse(root);
 
     // printf("inserted data.\n\n");
 
