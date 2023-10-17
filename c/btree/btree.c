@@ -40,8 +40,8 @@ struct Node *create_node(int leaf)
         exit(1);
     }
 
-    newNode->children = (struct Node *)malloc(T * sizeof(struct Node));
-    newNode->items = NULL;
+    newNode->children = (struct Node *)malloc(2 * T * sizeof(struct Node));
+    newNode->items = (struct Item *)malloc(2 * T * sizeof(struct Item));
     newNode->leaf = leaf;
     return newNode;
 }
@@ -51,8 +51,10 @@ void items_insert(struct Item **items, int *length, const char *key, const char 
     // Increase the length of the array
     (*length)++;
 
-    // Reallocate memory to accommodate the new item
-    *items = (struct Item *)realloc(*items, (*length) * sizeof(struct Item));
+    printf("length %d\n", *length);
+
+    // // Reallocate memory to accommodate the new item
+    // *items = (struct Item *)realloc(*items, (*length) * sizeof(struct Item));
 
     if (*items == NULL)
     {
@@ -116,20 +118,18 @@ void print_items(struct Item *items, int length)
 
 void split_child(struct Node *node, int index)
 {
-    printf("split_child index = %d\n", index);
-    printf("xlen1: %d\n", node->length);
-    struct Node *child = &node->children[0];
+
+    // printf("xlen1: %d\n", node->length);
+    struct Node *child = &node->children[index];
+    printf("split_child index = %d length = %d\n", index, child->length);
+    exit(1);
     struct Node *parent = create_node(child->leaf);
-    node->children[index] = *parent;
+    // printf("child len: %d\n", child->length);
+    node->children[index + 1] = *parent;
     node->items[index] = child->items[0];
 
-    items_insert(&node->items, &node->length, "test1", "tszzz");
-    items_insert(&node->items, &node->length, "test2", "tszzz");
-    items_insert(&node->items, &node->length, "test3", "tszzz");
-    // items_insert(&node->items, &node->length, "test4", "tszzz");
-
-    printf("xlen2: %d\n", node->length);
-    printf("child leaf: %d\n", child->leaf);
+    // printf("xlen2: %d\n", node->length);
+    // printf("child leaf: %d\n", child->leaf);
 }
 
 void insert_non_full(struct Node *node, char key[], char value[])
@@ -139,24 +139,20 @@ void insert_non_full(struct Node *node, char key[], char value[])
     if (node->leaf)
     {
         printf("LEAF!\n");
-        printf("len1: %d\n", node->length);
         items_insert(&node->items, &node->length, key, value);
-        printf("len2: %d\n", node->length);
     }
     else
     {
         printf("NON-LEAF!\n");
         int i = (node->length - 1);
-        printf("len3: %d\n", node->length);
         while (i >= 0 && strcmp(key, node->items[i].key) > 0)
         {
             i--;
         }
         i++;
-        if (node->children[i].length == (2 * T) - 1)
+        if (node->children[i].length >= (2 * T) - 1)
         {
             split_child(node, i);
-            printf("len4: %d\n", node->length);
             if (strcmp(key, node->items[i].key) > 0)
             {
                 i++;
@@ -168,14 +164,16 @@ void insert_non_full(struct Node *node, char key[], char value[])
 
 struct Node *insert(struct Node *root, char key[], char value[])
 {
-    printf("\n----insert!\n");
+    printf("----insert!\n");
     if (root == NULL)
     {
+        printf("create root.\n");
         root = create_node(1);
     }
 
     if (root->length == T)
     {
+        printf("root full.\n");
         struct Node *temp = create_node(0);
         temp->children[0] = *root;
         split_child(temp, 0);
@@ -238,6 +236,7 @@ struct Node *insert_data_ints(struct Node *root, int lower, int upper)
 
     for (int i = 0; i < num; i++)
     {
+        printf("\ni=%d", i);
         root = insert(root, keys[i], "x");
     }
     return root;
@@ -286,14 +285,7 @@ int main()
 
     struct Node *root = create_node(1);
 
-    root = insert_data_ints(root, 0, 15);
-
-    printf("null? %d\n", root == NULL);
-
-    printf("root->leaf? %d\n", (root->leaf));
-
-    printf("root->children[0].leaf? %d\n", (root->children[0].leaf));
-    printf("root->children[0].children[0].leaf? %d\n", (root->children[0].children[0].leaf));
+    root = insert_data_ints(root, 0, 1000);
 
     // printf("inserted data.\n\n");
 
