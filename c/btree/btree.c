@@ -180,8 +180,8 @@ void split_child(struct Node *node, int index)
     printf("\nnode items: child=%d len=%d\n", node->leaf, node->length);
     print_items(node->items, node->length);
 
-    // printf("\n\n---------------SPLIT-TRAVERSE---------------\n");
-    // traverse(node, 0);
+    printf("\n\n---------------SPLIT-TRAVERSE---------------\n");
+    traverse(node, 0);
 
     printf("\n");
 }
