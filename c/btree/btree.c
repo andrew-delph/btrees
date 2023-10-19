@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <assert.h>
 
-#define T 3
+#define T 4
 
 void segfault_handler(int signal_num)
 {
@@ -67,6 +67,7 @@ struct Item *create_item(char *key, char *value)
 
 void print_items(struct Item **items, int length)
 {
+    printf("len=(%d) >>", length);
     for (int i = 0; i < length; i++)
     {
         printf(" [%s]", items[i]->key);
@@ -151,13 +152,13 @@ void split_child(struct Node *node, int index)
     {
         parent->items[i] = child->items[T + i];
     }
-    // parent->length = T - 1;
+    parent->length = T - 1;
     for (int i = 0; i < T - 1; i++)
     {
         child->items[i] = child->items[i];
     }
-    // child->length = T - 1;
-    node->length++;
+    child->length = T - 1;
+    // node->length++;
     printf("!!!child is leaf: %d\n", child->leaf);
     if (child->leaf == 0)
     {
@@ -330,10 +331,16 @@ void test_items()
     return;
 }
 
+#define MAX(a, b) ((a > b) ? a : b)
+
+#define MIN(a, b) ((a < b) ? a : b)
+
 int main()
 {
     signal(SIGSEGV, segfault_handler);
     printf("started btree.\n");
+
+    printf("max=%d min=%d\n", MAX(2, 3), MIN(2, 3));
 
     // test_items();
     // return 0;
@@ -341,17 +348,17 @@ int main()
     int count;
     struct Node *root = NULL;
 
-    root = insert_data_ints(root, 0, 3, 0);
+    root = insert_data_ints(root, 0, 5, 0);
 
     printf("\n\n---------------TRAVERSE---------------\n");
     count = traverse(root, 0);
     printf("\ncount: %d", count);
     printf("\n\n");
 
-    root = insert(root, "3", "x");
-    printf("\n\n---------------TRAVERSE---------------\n");
-    count = traverse(root, 0);
-    printf("\ncount: %d", count);
+    // root = insert(root, "3", "x");
+    // printf("\n\n---------------TRAVERSE---------------\n");
+    // count = traverse(root, 0);
+    // printf("\ncount: %d", count);
 
     // assert(num == size);
     printf("\nDONE.\n");
