@@ -4,6 +4,8 @@
 #include <assert.h>
 
 #define T 4
+#define MAX(a, b) ((a > b) ? a : b)
+#define MIN(a, b) ((a < b) ? a : b)
 
 void segfault_handler(int signal_num)
 {
@@ -136,6 +138,7 @@ void split_child(struct Node *node, int index)
 {
 
     struct Node *child = node->children[index];
+    int child_length = child->length;
     printf("\n>>node items: %d\n", node->leaf);
     print_items(node->items, node->length);
     printf("\n");
@@ -152,12 +155,12 @@ void split_child(struct Node *node, int index)
     {
         parent->items[i] = child->items[T + i];
     }
-    parent->length = T - 1;
+    parent->length = MAX(child_length - T, 0);
     for (int i = 0; i < T - 1; i++)
     {
         child->items[i] = child->items[i];
     }
-    child->length = T - 1;
+    child->length = MIN(child_length, T - 1);
     // node->length++;
     printf("!!!child is leaf: %d\n", child->leaf);
     if (child->leaf == 0)
@@ -331,10 +334,6 @@ void test_items()
     return;
 }
 
-#define MAX(a, b) ((a > b) ? a : b)
-
-#define MIN(a, b) ((a < b) ? a : b)
-
 int main()
 {
     signal(SIGSEGV, segfault_handler);
@@ -348,7 +347,7 @@ int main()
     int count;
     struct Node *root = NULL;
 
-    root = insert_data_ints(root, 0, 5, 0);
+    root = insert_data_ints(root, 0, 15, 0);
 
     printf("\n\n---------------TRAVERSE---------------\n");
     count = traverse(root, 0);
