@@ -95,9 +95,9 @@ void items_insert(struct Item **items, int *length, char *key, char *value)
     (*length)++;
 
     printf("length %d\n", *length);
-    items[(*length) - 1] = create_item(key, value);
 
-    return;
+    // items[(*length) - 1] = create_item(key, value);
+    // return;
 
     if (items == NULL)
     {
@@ -114,8 +114,8 @@ void items_insert(struct Item **items, int *length, char *key, char *value)
         {
             break;
         }
-        (*items[i + 1]).key = (*items[i]).key;
-        (*items[i + 1]).value = (*items[i]).value;
+        items[i + 1] = items[i];
+        // (*items[i + 1]).value = (*items[i]).value;
         i--;
     }
 
