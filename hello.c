@@ -37,44 +37,35 @@ void change_str(char str[])
 //     return 0;
 // }
 
-// int main()
-// {
-//     printf("starting\n");
-//     register int total = 0;
-//     // int total = 0;
-//     int num = 100000000;
-//     for (int j = 0; j < 5; j++)
-//     {
-//         for (int i = 0; i < num; i++)
-//         {
-//             total++;
-//         }
-//         for (int i = 0; i < num; i++)
-//         {
-//             total--;
-//         }
-//         for (int i = 0; i < num; i++)
-//         {
-//             total++;
-//         }
-//     }
-
-//     printf("total = %d\n", total);
-//     return 0;
-// }
-void test(int i)
+struct Node
 {
-    if (i > 10)
-    {
-        return;
-    }
-    test(i + 1);
+    char *name;
+};
+
+void test(struct Node n)
+{
+    // printf("name = %s\n", n->name);
 }
-#define max(A, B) ((A) > (B) ? (A) : (B))
+
+void testp(struct Node *n)
+{
+    // printf("name = %s\n", n->name);
+}
+
 int main()
 {
-    printf("starting test().z\n");
-    test(0);
-    printf("max= %d\n", max('a', 2));
+    printf("starting\n");
+
+    struct Node n;
+    n.name = "andrew";
+    for (int i = 0; i < 100; i++)
+    {
+        for (int j = 0; j < 100; j++)
+        {
+            // test(n);
+            testp(&n);
+        }
+    }
+
     return 0;
 }

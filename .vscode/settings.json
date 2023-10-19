@@ -15,6 +15,7 @@
     "string_view": "c",
     "bitset": "c",
     "chrono": "c",
-    "algorithm": "c"
+    "algorithm": "c",
+    "typeinfo": "c"
   }
 }
