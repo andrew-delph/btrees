@@ -213,7 +213,7 @@ void insert_non_full(struct Node *node, char key[], char value[])
             }
         }
         printf("insert child: %d\n", i);
-        insert_non_full(&node->children[i], key, value);
+        insert_non_full(node->children[i], key, value);
     }
     printf("inf done.\n");
 }
@@ -233,7 +233,7 @@ struct Node *insert(struct Node *root, char key[], char value[])
         struct Node *temp = create_node(0);
         temp->children[0] = root;
         split_child(temp, 0);
-        // temp->length = 1;
+        temp->length = 1;
 
         insert_non_full(temp, key, value);
         return temp;
