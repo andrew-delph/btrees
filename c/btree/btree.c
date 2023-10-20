@@ -79,25 +79,28 @@ void print_items(struct Item **items, int length)
 
 int traverse(struct Node *node, int level, int index)
 {
-    if (node == NULL || node->length == 0)
-    {
-        return 0;
-    }
-    int count = node->length;
+
     printf("\n");
     for (int i = 0; i < level; i++)
     {
         printf("\t");
     }
-    printf("t(%d,%d,%d)|", level, index, node->length);
+    printf("t(%d,%d)|", level, index);
+    if (node == NULL || node->length == 0)
+    {
+        printf("[NULL]");
+        return 0;
+    }
+    int count = node->length;
     print_items(node->items, node->length);
+    if (node->leaf)
+    {
+        return count;
+    }
     for (int i = 0; i < node->length + 1; i++)
     {
 
-        if (node->children[i] != NULL)
-        {
-            count += traverse(node->children[i], level + 1, i);
-        }
+        count += traverse(node->children[i], level + 1, i);
     }
 
     return count;
