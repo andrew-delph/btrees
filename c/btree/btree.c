@@ -174,6 +174,8 @@ void split_child(struct Node *node, int index)
     print_items(split->items, split->length);
     printf("\n");
     traverse(node, 0, 0);
+    printf("\n");
+    printf("\n");
 
     char *nodeD = node->items[index] != NULL ? node->items[index]->key : "NULLLL111";
     char *splitD = split->items[T - 1] != NULL ? split->items[T - 1]->key : "NULLLL222";
