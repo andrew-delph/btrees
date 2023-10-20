@@ -169,8 +169,8 @@ void split_child(struct Node *node, int index)
     printf("\n");
     traverse(node, 0);
 
-    char *nodeD = node->items[index] != NULL ? node->items[index]->key : "NULLLLLLLLLL";
-    char *splitD = split->items[T - 1] != NULL ? split->items[T - 1]->key : "NULLLLLLLLLL";
+    char *nodeD = node->items[index] != NULL ? node->items[index]->key : "NULLLL111";
+    char *splitD = split->items[T - 1] != NULL ? split->items[T - 1]->key : "NULLLL222";
     printf("~~~~~~~~~~:  nodeD %s splitD %s\n", nodeD, splitD);
 
     printf("split_child index = %d length = %d key = %s\n", index, split->length, split->items[T - 1]->key);
@@ -344,30 +344,13 @@ struct Node *insert_data_ints(struct Node *root, int lower, int upper, int shuff
     return root;
 }
 
-void test_items()
+void tests()
 {
-    printf("test_items\n");
-    struct Item *items[20];
+    struct Node *root = NULL;
+    root = insert_data_ints(root, 0, 22, 0);
+    int count = traverse(root, 0);
+    assert(count == 22);
 
-    // struct Item insert;
-    // insert.key = "INSERT";
-    // insert.value = "VVV";
-    // items[1] = &insert;
-
-    // printf(">> %s\n", items[1]->key);
-
-    // insert.key = "??";
-    // printf(">> %s\n", items[1]->key);
-
-    // int length = 0;
-
-    // items_insert(items, &length, "b", "bb");
-    // print_items(items, length);
-
-    // items_insert(items, &length, "c", "cc");
-    // print_items(items, length);
-
-    printf("!!!\n");
     return;
 }
 
@@ -378,7 +361,7 @@ int main()
 
     printf("max=%d min=%d\n", MAX(2, 3), MIN(2, 3));
 
-    // test_items();
+    tests();
     // return 0;
 
     int count;
@@ -393,7 +376,7 @@ int main()
 
     printf("-------------------------------------------------------------------------------------\n");
 
-    root = insert(root, "-1", "x");
+    root = insert(root, "22", "x");
     printf("\n\n---------------TRAVERSE---------------\n");
     count = traverse(root, 0);
     printf("\ncount: %d", count);
