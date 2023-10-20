@@ -88,7 +88,7 @@ int traverse(struct Node *node, int level, int index)
     printf("t(%d,%d)|", level, index);
     if (node == NULL || node->length == 0)
     {
-        printf("[NULL]");
+        printf(" [NULL]");
         return 0;
     }
     int count = node->length;
