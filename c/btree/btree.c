@@ -187,26 +187,27 @@ void split_child(struct Node *node, int index)
     printf("\n");
 
     printf("split_child index = %d length = %d key = %s\n", index, split->length, split->items[T - 1]->key);
-    struct Node *parent = create_node(split->leaf);
+    struct Node *neighbor = create_node(split->leaf);
 
     for (int i = index + 1; i < 2 * T - 1; i++)
     {
         node->children[i + 1] = node->children[i];
     }
 
-    node->children[index + 1] = parent;
+    node->children[index + 1] = neighbor;
     items_insert(node->items, &node->length, split->items[T - 1]);
 
     for (int i = 0; i < T - 1; i++)
     {
-        parent->items[i] = split->items[T + i];
-        if (parent->items[i] != NULL)
+        neighbor->items[i] = split->items[T + i];
+        if (neighbor->items[i] != NULL)
         {
-            printf("parent key: %s\n", parent->items[i]->key);
+            printf("neighbor key: %s\n", neighbor->items[i]->key);
         }
-        // items_insert(parent->items, &parent->length, split->items[T + i]);
+        // items_insert(neighbor->items, &neighbor->length, split->items[T + i]);
     }
-    parent->length = MAX(split_length - T, 0);
+    printf("split_length: %d...%d\n", split_length, MAX(split_length - T, 0));
+    neighbor->length = MAX(split_length - T, 0);
     for (int i = 0; i < T - 1; i++)
     {
         split->items[i] = split->items[i];
@@ -219,7 +220,7 @@ void split_child(struct Node *node, int index)
         printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!child is leaf: %d\n", split->leaf);
         for (int i = 0; i < T; i++)
         {
-            parent->children[i] = split->children[T + i];
+            neighbor->children[i] = split->children[T + i];
         }
         for (int i = 0; i < T; i++)
         {
@@ -230,8 +231,8 @@ void split_child(struct Node *node, int index)
     printf("\n 2 split items: leaf=%d len=%d\n", split->leaf, split->length);
     print_items(split->items, split->length);
     printf("\n");
-    printf("\n 2 parent items: leaf=%d len=%d\n", parent->leaf, parent->length);
-    print_items(parent->items, parent->length);
+    printf("\n 2 neighbor items: leaf=%d len=%d\n", neighbor->leaf, neighbor->length);
+    print_items(neighbor->items, neighbor->length);
     printf("\n");
     printf("\n 2 node items: leaf=%d len=%d\n", node->leaf, node->length);
     print_items(node->items, node->length);
