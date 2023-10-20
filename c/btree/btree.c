@@ -85,12 +85,13 @@ int traverse(struct Node *node, int level, int index)
     {
         printf("\t");
     }
-    printf("t(%d,%d)|", level, index);
-    if (node == NULL || node->length == 0)
+    printf("t(%d,%d)", level, index);
+    if (node == NULL)
     {
         printf(" [NULL]");
         return 0;
     }
+    printf("(%d)|", node->length);
     int count = node->length;
     print_items(node->items, node->length);
     if (node->leaf)
@@ -343,6 +344,7 @@ char **generate_keys(int lower, int upper, int shuffle)
             exit(1);
         }
         snprintf(keys[i], 10, "%c", 'A' + id); // Convert integer to string
+        // snprintf(keys[i], 10, "%d", id); // Convert integer to string
     }
 
     if (shuffle)
@@ -369,9 +371,11 @@ struct Node *insert_data_ints(struct Node *root, int lower, int upper, int shuff
 void tests()
 {
     struct Node *root = NULL;
-    root = insert_data_ints(root, 0, 13, 0);
+    int num = 13;
+    root = insert_data_ints(root, 0, num, 0);
     int count = traverse(root, 0, 0);
-    assert(count == 13);
+    printf("\ntest count: %d\n", count);
+    assert(count == num);
 
     return;
 }
@@ -402,6 +406,8 @@ int main()
     printf("\n\n---------------TRAVERSE---------------\n");
     count = traverse(root, 0, 0);
     printf("\ncount: %d", count);
+
+    assert(count == 14);
 
     // assert(num == size);
     printf("\nDONE.\n");
