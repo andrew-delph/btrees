@@ -89,7 +89,7 @@ int traverse(struct Node *node, int level, int index)
     {
         printf("\t");
     }
-    printf("t(%d,%d)|", level, index);
+    printf("t(%d,%d,%d)|", level, index, node->length);
     print_items(node->items, node->length);
     for (int i = 0; i < node->length + 1; i++)
     {
@@ -164,22 +164,27 @@ void split_child(struct Node *node, int index)
 
     struct Node *split = node->children[index];
     int split_length = split->length;
-    printf(">>>>>>>>>>>>>>>\n");
-    printf(">>>>>>>>>>>>>>>\n");
-    printf(">>>>>>>>>>>>>>> node is leaf %d\n", node->leaf);
-    print_items(node->items, node->length);
     printf("\n");
+    printf(">>>>>>>>>>>>>>>\n");
+    printf(">>>>>>>>>>>>>>>\n");
+    printf(">>>>>>>>>>>>>>> leaf %d\n", node->leaf);
+    printf(">>>>>>>>>>>>>>> length %d\n", node->length);
+    printf("\n");
+    printf("---------------SPLIT-TRAVERSE-1---------------\n");
+    printf("traverse node:\n");
+    traverse(node, 0, 0);
 
-    printf("\n>>split items: %d\n", split->leaf);
+    printf("\n\ntraverse split:\n");
+    traverse(split, 0, 0);
+
+    printf("\n");
+    printf("\n 1 split items: leaf=%d len=%d\n", split->leaf, split->length);
     print_items(split->items, split->length);
     printf("\n");
-    traverse(node, 0, 0);
+    printf("\n 1 node items: leaf=%d len=%d\n", node->leaf, node->length);
+    print_items(node->items, node->length);
     printf("\n");
     printf("\n");
-
-    char *nodeD = node->items[index] != NULL ? node->items[index]->key : "NULLLL111";
-    char *splitD = split->items[T - 1] != NULL ? split->items[T - 1]->key : "NULLLL222";
-    printf("~~~~~~~~~~:  nodeD %s splitD %s\n", nodeD, splitD);
 
     printf("split_child index = %d length = %d key = %s\n", index, split->length, split->items[T - 1]->key);
     struct Node *parent = create_node(split->leaf);
@@ -195,6 +200,10 @@ void split_child(struct Node *node, int index)
     for (int i = 0; i < T - 1; i++)
     {
         parent->items[i] = split->items[T + i];
+        if (parent->items[i] != NULL)
+        {
+            printf("parent key: %s\n", parent->items[i]->key);
+        }
         // items_insert(parent->items, &parent->length, split->items[T + i]);
     }
     parent->length = MAX(split_length - T, 0);
@@ -218,19 +227,20 @@ void split_child(struct Node *node, int index)
         }
     }
 
-    printf("\nchild items: leaf=%d len=%d\n", split->leaf, split->length);
+    printf("\n 2 split items: leaf=%d len=%d\n", split->leaf, split->length);
     print_items(split->items, split->length);
-
-    printf("\nparent items: leaf=%d len=%d\n", parent->leaf, parent->length);
+    printf("\n");
+    printf("\n 2 parent items: leaf=%d len=%d\n", parent->leaf, parent->length);
     print_items(parent->items, parent->length);
-
-    printf("\nnode items: leaf=%d len=%d\n", node->leaf, node->length);
+    printf("\n");
+    printf("\n 2 node items: leaf=%d len=%d\n", node->leaf, node->length);
     print_items(node->items, node->length);
 
-    // printf("\n\n---------------SPLIT-TRAVERSE---------------\n");
-    // traverse(node, 0);
+    printf("\n\n---------------SPLIT-TRAVERSE-2---------------\n");
+    traverse(node, 0, 0);
     // printf("don.\n");
-
+    printf("\n<<<<<<<<<<<<<<<<\n");
+    printf("<<<<<<<<<<<<<<<<\n");
     printf("\n");
 }
 
@@ -277,6 +287,7 @@ struct Node *insert(struct Node *root, char key[], char value[])
     if (root->length == T)
     {
         printf("root full.\n");
+        traverse(root, 0, 0);
         struct Node *temp = create_node(0);
         temp->children[0] = root;
         split_child(temp, 0);
@@ -381,7 +392,7 @@ int main()
     printf("\ncount: %d", count);
     printf("\n\n");
 
-    printf("-------------------------------------------------------------------------------------\n");
+    printf("---BAD-INSERT------------------------------------------------------------------------------------\n");
 
     root = insert(root, "Z", "x");
     printf("\n\n---------------TRAVERSE---------------\n");
