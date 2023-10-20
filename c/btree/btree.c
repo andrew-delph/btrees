@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <assert.h>
 
-#define T 4
+#define T 2
 #define MAX(a, b) ((a > b) ? a : b)
 #define MIN(a, b) ((a < b) ? a : b)
 
@@ -69,31 +69,37 @@ struct Item *create_item(char *key, char *value)
 
 void print_items(struct Item **items, int length)
 {
-    printf("len=(%d) >>", length);
+    // printf("len=(%d) >>", length);
     for (int i = 0; i < length; i++)
     {
         printf(" [%s]", items[i]->key);
     }
-    printf("\n");
+    // printf("\n");
 }
 
-int traverse(struct Node *node, int level)
+int traverse(struct Node *node, int level, int index)
 {
     if (node == NULL || node->length == 0)
     {
         return 0;
     }
     int count = node->length;
-    printf("t(%d)|  ", level);
+    printf("\n");
+    for (int i = 0; i < level; i++)
+    {
+        printf("\t");
+    }
+    printf("t(%d,%d)|", level, index);
     print_items(node->items, node->length);
     for (int i = 0; i < node->length + 1; i++)
     {
+
         if (node->children[i] != NULL)
         {
-            printf("<%d>", i);
+            count += traverse(node->children[i], level + 1, i);
         }
-        count += traverse(node->children[i], level + 1);
     }
+
     return count;
 }
 
@@ -167,7 +173,7 @@ void split_child(struct Node *node, int index)
     printf("\n>>split items: %d\n", split->leaf);
     print_items(split->items, split->length);
     printf("\n");
-    traverse(node, 0);
+    traverse(node, 0, 0);
 
     char *nodeD = node->items[index] != NULL ? node->items[index]->key : "NULLLL111";
     char *splitD = split->items[T - 1] != NULL ? split->items[T - 1]->key : "NULLLL222";
@@ -259,7 +265,7 @@ void insert_non_full(struct Node *node, char key[], char value[])
 
 struct Node *insert(struct Node *root, char key[], char value[])
 {
-    printf("----insert!\n");
+    printf("----insert! %s\n", key);
     if (root == NULL)
     {
         printf("create root.\n");
@@ -347,9 +353,9 @@ struct Node *insert_data_ints(struct Node *root, int lower, int upper, int shuff
 void tests()
 {
     struct Node *root = NULL;
-    root = insert_data_ints(root, 0, 22, 0);
-    int count = traverse(root, 0);
-    assert(count == 22);
+    root = insert_data_ints(root, 0, 16, 0);
+    int count = traverse(root, 0, 0);
+    assert(count == 16);
 
     return;
 }
@@ -367,19 +373,19 @@ int main()
     int count;
     struct Node *root = NULL;
 
-    root = insert_data_ints(root, 0, 22, 0);
+    root = insert_data_ints(root, 0, 16, 0);
 
     printf("\n\n---------------TRAVERSE---------------\n");
-    count = traverse(root, 0);
+    count = traverse(root, 0, 0);
     printf("\ncount: %d", count);
     printf("\n\n");
 
     printf("-------------------------------------------------------------------------------------\n");
 
-    root = insert(root, "22", "x");
-    printf("\n\n---------------TRAVERSE---------------\n");
-    count = traverse(root, 0);
-    printf("\ncount: %d", count);
+    // root = insert(root, "16", "x");
+    // printf("\n\n---------------TRAVERSE---------------\n");
+    // count = traverse(root, 0);
+    // printf("\ncount: %d", count);
 
     // assert(num == size);
     printf("\nDONE.\n");
