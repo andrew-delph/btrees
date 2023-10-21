@@ -6,13 +6,12 @@
 #include <assert.h>
 #include <time.h>
 
-#define MIN 1000
-#define MAX MIN * 2
+#define T 1000
 
 struct BTreeNode
 {
-    int val[MAX + 1], count;
-    struct BTreeNode *link[MAX + 1];
+    int val[T * 2 + 1], count;
+    struct BTreeNode *link[T * 2 + 1];
 };
 
 struct BTreeNode *root;
@@ -51,23 +50,23 @@ void splitNode(int val, int *pval, int pos, struct BTreeNode *node,
 {
     int median, j;
 
-    if (pos > MIN)
-        median = MIN + 1;
+    if (pos > T)
+        median = T + 1;
     else
-        median = MIN;
+        median = T;
 
     *newNode = (struct BTreeNode *)malloc(sizeof(struct BTreeNode));
     j = median + 1;
-    while (j <= MAX)
+    while (j <= T * 2)
     {
         (*newNode)->val[j - median] = node->val[j];
         (*newNode)->link[j - median] = node->link[j];
         j++;
     }
     node->count = median;
-    (*newNode)->count = MAX - median;
+    (*newNode)->count = T * 2 - median;
 
-    if (pos <= MIN)
+    if (pos <= T)
     {
         insertNode(val, pos, node, child);
     }
@@ -109,7 +108,7 @@ int setValue(int val, int *pval,
     }
     if (setValue(val, pval, node->link[pos], child))
     {
-        if (node->count < MAX)
+        if (node->count < T * 2)
         {
             insertNode(*pval, pos, node, *child);
         }
@@ -178,7 +177,6 @@ void traversal(struct BTreeNode *myNode)
 int main()
 {
 
-    printf("MIN %d MAX %d\n", MIN, MAX);
     int val, ch;
 
     clock_t start_time, end_time;
