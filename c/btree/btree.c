@@ -474,7 +474,7 @@ void test_tree(int num)
     struct Node *root = NULL;
     root = insert_data_ints(root, 0, num, 0);
     int count = traverse(root, 0, 0);
-    printf("\ntest count: %d num: %d\n", count, num);
+    printf("\ntest count: %d num: %d", count, num);
     assert(count == num);
 
     return;
