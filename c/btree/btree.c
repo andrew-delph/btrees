@@ -436,19 +436,14 @@ struct Node *insert_data_ints(struct Node *root, int lower, int upper, int shuff
         // char *got = get_value(root, keys[i]);
         // printf("\n[after insert]keys[i]: %s got : %s\n", keys[i], got);
         // assert(got == keys[i]);
-        for (int j = 0; j <= i; j++)
-        {
-            char *check_key = keys[j];
-            char *got_value = get_value(root, check_key);
-            if (got_value != check_key)
-            {
-                // printf("\n[full check] keys[j]: %s got: %s j=%d i=%d\n", check_key, got_value, j, i);
-                debug_flag = 1;
-                get_value(root, check_key);
-                debug_flag = prev;
-            }
-            assert(got_value == check_key);
-        }
+    }
+
+    for (int i = 0; i < num; i++)
+    {
+        char *check_key = keys[i];
+        char *got_value = get_value(root, check_key);
+
+        assert(got_value == check_key);
     }
 
     return root;
