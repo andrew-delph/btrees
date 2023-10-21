@@ -4,9 +4,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <time.h>
 
-#define MAX 3
-#define MIN 2
+#define MIN 1000
+#define MAX MIN * 2
 
 struct BTreeNode
 {
@@ -178,31 +179,30 @@ int main()
 {
     int val, ch;
 
-    for (int i = 0; i < 10000; i++)
+    clock_t start_time, end_time;
+    double elapsed_time;
+
+    // Record the start time
+    start_time = clock();
+
+    int num = 100000;
+    for (int i = 0; i < num; i++)
     {
         insert(i);
     }
 
-    for (int i = 0; i < 10000; i++)
+    for (int i = 0; i < num; i++)
     {
         assert(search(i, &ch, root));
         // printf("\ni %d ch %d\n", i, ch);
     }
 
-    // insert(8);
-    // insert(9);
-    // insert(10);
-    // insert(11);
-    // insert(15);
-    // insert(16);
-    // insert(17);
-    // insert(18);
-    // insert(20);
-    // insert(23);
+    end_time = clock();
 
-    // traversal(root);
+    // Calculate the elapsed time in seconds
+    elapsed_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
 
-    // printf("\n");
-    // search(11, &ch, root);
+    printf("Elapsed time: %.2f seconds\n", elapsed_time);
+
     printf("done.");
 }

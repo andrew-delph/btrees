@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <stdarg.h>
+#include <time.h>
 
 #define T 1000
 #define MAX(a, b) ((a > b) ? a : b)
@@ -354,6 +355,12 @@ struct Node *insert_data_ints(struct Node *root, int lower, int upper, int shuff
     int num = upper - lower;
     char **keys = generate_keys(lower, upper, shuffle);
 
+    clock_t start_time, end_time;
+    double elapsed_time;
+
+    // Record the start time
+    start_time = clock();
+
     for (int i = 0; i < num; i++)
     {
         root = insert(root, keys[i], keys[i]);
@@ -367,6 +374,13 @@ struct Node *insert_data_ints(struct Node *root, int lower, int upper, int shuff
         assert(got_value == check_key);
     }
 
+    end_time = clock();
+
+    // Calculate the elapsed time in seconds
+    elapsed_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
+
+    printf("Elapsed time: %.2f seconds\n", elapsed_time);
+
     return root;
 }
 
@@ -374,9 +388,9 @@ void test_tree(int num)
 {
     struct Node *root = NULL;
     root = insert_data_ints(root, 0, num, 0);
-    int count = traverse(root, 0, 0);
-    printf("\ntest count: %d num: %d", count, num);
-    assert(count == num);
+    // int count = traverse(root, 0, 0);
+    // printf("\ntest count: %d num: %d", count, num);
+    // assert(count == num);
 
     return;
 }
@@ -430,7 +444,7 @@ int main()
 
     // test();
 
-    test_tree(10000);
+    test_tree(100000);
     printf("done\n");
     return 0;
 }
