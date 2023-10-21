@@ -270,7 +270,7 @@ void insert_non_full(struct Node *node, char key[], char value[])
         {
             printf("insert_non_full split\n");
             split_child(node, i);
-            if (strcmp(key, node->items[i]->key) > 0)
+            if (strcmp(key, node->items[i]->key) < 0)
             {
                 i++;
             }
@@ -368,15 +368,22 @@ struct Node *insert_data_ints(struct Node *root, int lower, int upper, int shuff
     return root;
 }
 
-void tests()
+void test_tree(int num)
 {
     struct Node *root = NULL;
-    int num = 13;
     root = insert_data_ints(root, 0, num, 0);
     int count = traverse(root, 0, 0);
     printf("\ntest count: %d\n", count);
     assert(count == num);
 
+    return;
+}
+void tests()
+{
+    for (int i = 0; i < 100; i++)
+    {
+        test_tree(i);
+    }
     return;
 }
 
