@@ -118,14 +118,20 @@ int traverse(struct Node *node, int level, int index)
     debug("(%d)| ", node->length);
     int count = node->length;
     print_items(node->items, node->length);
-    if (node->leaf || node->length == 0)
+    if (node->leaf)
     {
         return count;
     }
     for (int i = 0; i < node->length + 1; i++)
     {
-
-        count += traverse(node->children[i], level + 1, i);
+        if (node->length)
+        {
+            count += traverse(node->children[i], level + 1, i);
+        }
+        else
+        {
+            traverse(node->children[i], level + 1, i);
+        }
     }
 
     return count;
@@ -448,7 +454,7 @@ void test_tree(int num)
     struct Node *root = NULL;
     root = insert_data_ints(root, 0, num, 0);
     int count = traverse(root, 0, 0);
-    debug("\ntest count: %d num: %d\n", count, num);
+    printf("\ntest count: %d num: %d\n", count, num);
     assert(count == num);
 
     return;
