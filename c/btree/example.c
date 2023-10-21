@@ -193,6 +193,11 @@ int main()
         insert(i);
     }
 
+    end_time = clock();
+    elapsed_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
+    printf("INSERT time: %.2f seconds\n", elapsed_time);
+    start_time = clock();
+
     for (int i = 0; i < num; i++)
     {
         assert(search(i, &ch, root));
@@ -204,7 +209,7 @@ int main()
     // Calculate the elapsed time in seconds
     elapsed_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
 
-    printf("Elapsed time: %.2f seconds\n", elapsed_time);
+    printf("Get time: %.2f seconds\n", elapsed_time);
 
     printf("done.");
 }

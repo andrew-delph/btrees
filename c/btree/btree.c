@@ -351,7 +351,10 @@ struct Node *insert_data_ints(struct Node *root, int lower, int upper, int shuff
     {
         root = insert(root, keys[i], keys[i]);
     }
-
+    end_time = clock();
+    elapsed_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
+    printf("INSERT time: %.2f seconds\n", elapsed_time);
+    start_time = clock();
     for (int i = 0; i < num; i++)
     {
         char *check_key = keys[i];
@@ -365,7 +368,7 @@ struct Node *insert_data_ints(struct Node *root, int lower, int upper, int shuff
     // Calculate the elapsed time in seconds
     elapsed_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
 
-    printf("Elapsed time: %.2f seconds\n", elapsed_time);
+    printf("Get time: %.2f seconds\n", elapsed_time);
 
     return root;
 }
@@ -430,7 +433,7 @@ int main()
 
     // test();
 
-    test_tree(2000000);
+    test_tree(10000000);
     printf("done\n");
     return 0;
 }
