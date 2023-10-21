@@ -137,6 +137,34 @@ int traverse(struct Node *node, int level, int index)
     return count;
 }
 
+int items_search(struct Item **items, int length, char *key)
+{
+    int left = 0;
+    int right = length - 1;
+
+    debug("left: %d right: %d\n", left, right);
+
+    while (left <= right)
+    {
+
+        int mid = left + (right - left) / 2;
+        int comp = strcmp(key, items[mid]->key);
+        debug("mid %d comp %d k1 %s k2 %s\n", mid, comp, key, items[mid]->key);
+        if (comp == 0)
+        {
+            return mid;
+        }
+        else if (comp > 0)
+        {
+            left = mid + 1;
+        }
+        else
+        {
+            right = mid - 1;
+        }
+    }
+}
+
 void items_insert(struct Item **items, int *length, struct Item *item)
 {
     if (item == NULL)
@@ -180,34 +208,6 @@ void items_insert(struct Item **items, int *length, struct Item *item)
     }
 
     items[index] = item;
-}
-
-int items_search(struct Item **items, int length, char *key)
-{
-    int left = 0;
-    int right = length - 1;
-
-    debug("left: %d right: %d\n", left, right);
-
-    while (left <= right)
-    {
-
-        int mid = left + (right - left) / 2;
-        int comp = strcmp(key, items[mid]->key);
-        debug("mid %d comp %d k1 %s k2 %s\n", mid, comp, key, items[mid]->key);
-        if (comp == 0)
-        {
-            return mid;
-        }
-        else if (comp > 0)
-        {
-            left = mid + 1;
-        }
-        else
-        {
-            right = mid - 1;
-        }
-    }
 }
 
 void items_insert_kv(struct Item **items, int *length, char *key, char *value)
