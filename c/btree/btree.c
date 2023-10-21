@@ -187,7 +187,7 @@ void items_insert_kv(struct Item **items, int *length, char *key, char *value)
     items_insert(items, length, create_item(key, value));
 }
 
-// Function to get the length of the Items structure
+// Function to get_value the length of the Items structure
 int items_length(const struct Node *node)
 {
     return node->length;
@@ -277,11 +277,11 @@ void split_child(struct Node *node, int index)
     print_items(node->items, node->length);
 
     debug("\n\n---------------SPLIT-TRAVERSE-2---------------\n");
-    printf("node:\n");
+    debug("node:\n");
     traverse(node, 0, 0);
-    printf("\nsplit:\n");
+    debug("\nsplit:\n");
     traverse(split, 0, 0);
-    printf("\n neighbor:\n");
+    debug("\n neighbor:\n");
     traverse(neighbor, 0, 0);
     // debug("don.\n");
     debug("\n<<<<<<<<<<<<<<<<\n");
@@ -289,28 +289,38 @@ void split_child(struct Node *node, int index)
     debug("\n");
 }
 
-char *get(struct Node *node, char key[])
+char *get_value(struct Node *node, char key[])
 {
     if (node == NULL)
     {
         return NULL;
     }
-    for (int i = 0; i < node->length; i++)
-    {
+    debug("len: %d \n", node->length);
 
+    // int i = (node->length - 1);
+    // while (i >= 0 && strcmp(key, node->items[0]->key) <= 0)
+    // {
+    //     i--;
+    // }
+    // i++;
+
+    for (int i = node->length - 1; i >= 0; i--)
+    {
         int comp = strcmp(key, node->items[i]->key);
+        debug("comp: (%s|%s) = %d \n", key, node->items[i]->key, comp);
         if (comp == 0)
         {
+            debug("equal get_value %d\n", i);
             return node->items[i]->value;
         }
-        else if (comp < 0)
+        else if (comp > 0)
         {
-            debug("get %d\n", i);
-            return get(node->children[i], key);
+            debug("get_value %d\n", i);
+            return get_value(node->children[i + 1], key);
         }
     }
-    debug("get %d\n", node->length);
-    return get(node->children[node->length], key);
+    debug("last get_value %d\n", node->length);
+    return get_value(node->children[0], key);
 }
 
 void insert_non_full(struct Node *node, char key[], char value[])
@@ -325,7 +335,7 @@ void insert_non_full(struct Node *node, char key[], char value[])
     {
         debug("NON-LEAF!\n");
         int i = (node->length - 1);
-        while (i >= 0 && strcmp(key, node->items[0]->key) < 0)
+        while (i >= 0 && strcmp(key, node->items[i]->key) < 0)
         {
             i--;
         }
@@ -338,7 +348,7 @@ void insert_non_full(struct Node *node, char key[], char value[])
             // printf("CHECKING %s comp %d\n", node->items[i]->key, comp);
             if (strcmp(key, node->items[i]->key) > 0)
             {
-                printf("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX!!!!!!!!!!!!!!!!!!!!! i++\n");
+                debug("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX!!!!!!!!!!!!!!!!!!!!! i++\n");
                 i++;
             }
         }
@@ -429,26 +439,27 @@ struct Node *insert_data_ints(struct Node *root, int lower, int upper, int shuff
 
     for (int i = 0; i < num; i++)
     {
-        printf("\n \n i=%d\n", i);
         int prev = debug_flag;
-        debug_flag = 1;
+        // debug_flag = 1;
+        debug("\n \n i=%d\n", i);
         root = insert(root, keys[i], keys[i]);
         traverse(root, 0, 0);
+        debug("\n");
+        debug("\n");
         debug_flag = prev;
-        printf("\n");
-        // char *got = get(root, keys[i]);
+
+        // char *got = get_value(root, keys[i]);
         // printf("\n[after insert]keys[i]: %s got : %s\n", keys[i], got);
         // assert(got == keys[i]);
-        printf("\n");
         for (int j = 0; j <= i; j++)
         {
             char *check_key = keys[j];
-            char *got_value = get(root, check_key);
+            char *got_value = get_value(root, check_key);
             if (got_value != check_key)
             {
                 printf("\n[full check] keys[j]: %s got: %s j=%d i=%d\n", check_key, got_value, j, i);
                 debug_flag = 1;
-                get(root, check_key);
+                get_value(root, check_key);
                 debug_flag = prev;
             }
             assert(got_value == check_key);
@@ -470,7 +481,7 @@ void test_tree(int num)
 }
 void tests()
 {
-    for (int i = 0; i < 40; i++)
+    for (int i = 1000; i < 1100; i++)
     {
         test_tree(i);
     }

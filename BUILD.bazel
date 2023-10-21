@@ -24,6 +24,14 @@ cc_binary(
 )
 
 cc_binary(
+    name = "comp",
+    srcs = ["comp.c"],
+    deps = [
+        ":deps",
+    ],
+)
+
+cc_binary(
     name = "hello2",
     srcs = ["hello2.c"],
     deps = [

@@ -16,6 +16,7 @@
     "bitset": "c",
     "chrono": "c",
     "algorithm": "c",
-    "typeinfo": "c"
+    "typeinfo": "c",
+    "stdio.h": "c"
   }
 }
