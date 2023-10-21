@@ -74,22 +74,48 @@ void print_items(struct Item **items, int length)
     // printf("\n");
 }
 
-int traverse(struct Node *node, int level, int index)
+int count_nodes(struct Node *node, int level, int index)
 {
-    // printf("\n");
-    // for (int i = 0; i < level; i++)
-    // {
-    //     printf("\t");
-    // }
-    // printf("t(%d,%d)", level, index);
     if (node == NULL)
     {
-        // printf(" [NULL]");
         return 0;
     }
-    // printf("(%d)| ", node->length);
     int count = node->length;
-    // print_items(node->items, node->length);
+    if (node->leaf)
+    {
+        return count;
+    }
+    for (int i = 0; i < node->length + 1; i++)
+    {
+        if (node->length)
+        {
+            count += count_nodes(node->children[i], level + 1, i);
+        }
+        else
+        {
+            count_nodes(node->children[i], level + 1, i);
+        }
+    }
+
+    return count;
+}
+
+int traverse(struct Node *node, int level, int index)
+{
+    printf("\n");
+    for (int i = 0; i < level; i++)
+    {
+        printf("\t");
+    }
+    printf("t(%d,%d)", level, index);
+    if (node == NULL)
+    {
+        printf(" [NULL]");
+        return 0;
+    }
+    printf("(%d)| ", node->length);
+    int count = node->length;
+    print_items(node->items, node->length);
     if (node->leaf)
     {
         return count;
@@ -364,7 +390,7 @@ void test_tree(int num)
 {
     struct Node *root = NULL;
     root = insert_data_ints(root, 0, num, 0);
-    // int count = traverse(root, 0, 0);
+    // int count = count_nodes(root, 0, 0);
     // printf("\ntest count: %d num: %d", count, num);
     // assert(count == num);
 
