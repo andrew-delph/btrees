@@ -83,16 +83,21 @@ struct Item *create_item(char *key, char *value)
 void print_items(struct Item **items, int length)
 {
     // debug("len=(%d) >>", length);
-    for (int i = 0; i < 2 * T; i++)
+    // for (int i = 0; i < 2 * T; i++)
+    // {
+    //     if (items[i] != NULL)
+    //     {
+    //         debug("[%s] ", items[i]->key);
+    //     }
+    //     else
+    //     {
+    //         debug("[%s]", "N");
+    //     }
+    // }
+
+    for (int i = 0; i < length; i++)
     {
-        if (items[i] != NULL)
-        {
-            debug("[%s] ", items[i]->key);
-        }
-        else
-        {
-            debug("[%s]", "N");
-        }
+        debug("[%s] ", items[i]->key);
     }
     // debug("\n");
 }
@@ -113,7 +118,7 @@ int traverse(struct Node *node, int level, int index)
     debug("(%d)| ", node->length);
     int count = node->length;
     print_items(node->items, node->length);
-    if (node->leaf)
+    if (node->leaf || node->length == 0)
     {
         return count;
     }
