@@ -177,6 +177,8 @@ void traversal(struct BTreeNode *myNode)
 
 int main()
 {
+
+    printf("MIN %d MAX %d\n", MIN, MAX);
     int val, ch;
 
     clock_t start_time, end_time;
@@ -185,7 +187,7 @@ int main()
     // Record the start time
     start_time = clock();
 
-    int num = 100000;
+    int num = 10000000;
     for (int i = 0; i < num; i++)
     {
         insert(i);

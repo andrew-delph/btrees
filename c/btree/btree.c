@@ -444,7 +444,7 @@ int main()
 
     // test();
 
-    test_tree(100000);
+    test_tree(10000000);
     printf("done\n");
     return 0;
 }
