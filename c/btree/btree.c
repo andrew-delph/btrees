@@ -4,7 +4,7 @@
 #include <assert.h>
 #include <stdarg.h>
 
-#define T 10
+#define T 100
 #define MAX(a, b) ((a > b) ? a : b)
 #define MIN(a, b) ((a < b) ? a : b)
 
@@ -308,30 +308,17 @@ char *get_value(struct Node *node, char key[])
     }
     debug("len: %d \n", node->length);
 
-    // int i = (node->length - 1);
-    // while (i >= 0 && strcmp(key, node->items[0]->key) <= 0)
-    // {
-    //     i--;
-    // }
-    // i++;
-
-    for (int i = node->length - 1; i >= 0; i--)
+    int index = items_search(node->items, node->length, key);
+    if (index >= node->length)
     {
-        int comp = strcmp(key, node->items[i]->key);
-        debug("comp: (%s|%s) = %d \n", key, node->items[i]->key, comp);
-        if (comp == 0)
-        {
-            debug("equal get_value %d\n", i);
-            return node->items[i]->value;
-        }
-        else if (comp > 0)
-        {
-            debug("get_value %d\n", i);
-            return get_value(node->children[i + 1], key);
-        }
+        return get_value(node->children[node->length], key);
     }
-    debug("last get_value %d\n", node->length);
-    return get_value(node->children[0], key);
+    else if (
+        strcmp(key, node->items[index]->key) == 0)
+    {
+        return node->items[index]->value;
+    }
+    return get_value(node->children[index], key);
 }
 
 void insert_non_full(struct Node *node, char key[], char value[])
@@ -540,37 +527,7 @@ int main()
 
     // test();
 
-    // test_tree();
     test_tree(10000);
     printf("done\n");
-    return 0;
-    printf("\n\n\n\n\n\n\n\n\n");
-
-    int count;
-    struct Node *root = NULL;
-
-    int num = 6;
-    root = insert_data_ints(root, 0, num, 0);
-
-    printf("\n\n---------------TRAVERSE---------------\n");
-    count = traverse(root, 0, 0);
-    printf("\ncount: %d", count);
-    printf("\nFIRST\n");
-
-    assert(count == num);
-    return 0;
-
-    printf("---BAD-INSERT------------------------------------------------------------------------------------\n");
-
-    root = insert(root, "36", "x");
-    printf("\n\n---------------TRAVERSE---------------\n");
-    count = traverse(root, 0, 0);
-    printf("\nSECOND. count: %d\n", count);
-
-    assert(count == ++num);
-
-    // assert(num == size);
-    printf("\nDONE.\n");
-
     return 0;
 }
