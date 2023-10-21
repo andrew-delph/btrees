@@ -4,7 +4,7 @@
 #include <assert.h>
 #include <stdarg.h>
 
-#define T 3
+#define T 10
 #define MAX(a, b) ((a > b) ? a : b)
 #define MIN(a, b) ((a < b) ? a : b)
 
@@ -167,47 +167,53 @@ int items_search(struct Item **items, int length, char *key)
 
 void items_insert(struct Item **items, int *length, struct Item *item)
 {
-    if (item == NULL)
-    {
-        debug("items_insert item is NULL\n");
-        return;
-    }
-
-    // Increase the length of the array
-
-    // debug("length %d\n", *length);
-
-    // items[(*length) - 1] = create_item(key, value);
-    // return;
 
     if (items == NULL)
     {
-        fprintf(stderr, "Memory allocation failed.\n");
+        fprintf(stderr, "items is NULL.\n");
         exit(1);
     }
 
-    int i = (*length) - 1;
-    while (i >= 0)
+    int index = items_search(items, *length, item->key);
+
+    if ((*length) < index && items[index] != NULL && items[index]->key != NULL && strcmp(item->key, items[index]->key) == 0)
     {
-        int comp = strcmp(item->key, items[i]->key);
-        int found = comp > 0;
-        if (found)
-        {
-            break;
-        }
-        items[i + 1] = items[i];
-        // (*items[i + 1]).value = (*items[i]).value;
-        i--;
+        items[index] = item;
     }
-
-    int index = i + 1;
-
-    if (items[index] == NULL || items[index]->key != item->key)
+    else
     {
+        for (int i = 2 * T - 2; i >= index; i--)
+        {
+            items[i + 1] = items[i];
+        }
+        items[index] = item;
         (*length)++;
     }
 
-    items[index] = item;
+    return;
+
+    // int i = (*length) - 1;
+    // while (i >= 0)
+    // {
+    //     int comp = strcmp(item->key, items[i]->key);
+    //     int found = comp > 0;
+    //     if (found)
+    //     {
+    //         break;
+    //     }
+    //     items[i + 1] = items[i];
+    //     // (*items[i + 1]).value = (*items[i]).value;
+    //     i--;
+    // }
+
+    // int index = i + 1;
+
+    // if (items[index] == NULL || items[index]->key != item->key)
+    // {
+    //     (*length)++;
+    // }
+
+    // items[index] = item;
 }
 
 void items_insert_kv(struct Item **items, int *length, char *key, char *value)
@@ -544,6 +550,7 @@ void test()
 {
     // debug_flag = 1;
     test_items();
+    test_trees();
     printf("\nDONE TESTS.\n");
 }
 
@@ -554,10 +561,10 @@ int main()
 
     debug("max=%d min=%d\n", MAX(2, 3), MIN(2, 3));
 
-    test();
+    // test();
 
     // test_tree();
-    // test_tree(10000);
+    test_tree(10000);
     printf("done\n");
     return 0;
     printf("\n\n\n\n\n\n\n\n\n");
