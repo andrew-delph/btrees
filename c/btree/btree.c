@@ -441,9 +441,9 @@ int main()
 
     printf("max=%d min=%d\n", MAX(2, 3), MIN(2, 3));
 
-    test();
+    // test();
 
-    // test_tree(10000000);
+    test_tree(10000000);
     printf("done\n");
     return 0;
 }
