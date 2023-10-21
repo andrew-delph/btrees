@@ -401,29 +401,28 @@ struct Node *insert_data_ints(struct Node *root, int lower, int upper, int shuff
     for (int i = 0; i < num; i++)
     {
         printf("\n \n i=%d\n", i);
-        root = insert(root, keys[i], keys[i]);
-        int prev = debug_flag;
-        // debug_flag = 1;
-        traverse(root, 0, 0);
-        debug_flag = prev;
-        printf("\n\n");
-        char *got = get(root, keys[i]);
-        printf("\n[after insert]keys[i]: %s got : %s\n", keys[i], got);
-        assert(got == keys[i]);
-    }
-
-    for (int i = 0; i < num; i++)
-    {
-
         int prev = debug_flag;
         debug_flag = 1;
+        root = insert(root, keys[i], keys[i]);
         traverse(root, 0, 0);
         debug_flag = prev;
-        printf("\n\n");
-        char *got = get(root, keys[i]);
-        printf("\n[full check] keys[i]: %s got: %s l=%d u=%d\n", keys[i], got, lower, upper);
-        assert(got == keys[i]);
+        printf("\n");
+        // char *got = get(root, keys[i]);
+        // printf("\n[after insert]keys[i]: %s got : %s\n", keys[i], got);
+        // assert(got == keys[i]);
+        printf("\n");
+        for (int j = 0; j <= i; j++)
+        {
+            char *check_key = keys[j];
+            char *got_value = get(root, check_key);
+            if (got_value != check_key)
+            {
+                printf("\n[full check] keys[j]: %s got: %s j=%d i=%d\n", check_key, got_value, j, i);
+            }
+            assert(got_value == check_key);
+        }
     }
+
     return root;
 }
 
