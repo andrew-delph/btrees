@@ -306,7 +306,9 @@ void insert_non_full(struct Node *node, char key[], char value[])
         {
             debug("insert_non_full split\n");
             split_child(node, i);
-            if (strcmp(key, node->items[i]->key) < 0)
+            int comp = strcmp(key, node->items[i]->key);
+            // printf("CHECKING %s comp %d\n", node->items[i]->key, comp);
+            if (strcmp(key, node->items[i]->key) > 0)
             {
                 i++;
             }
@@ -401,12 +403,25 @@ struct Node *insert_data_ints(struct Node *root, int lower, int upper, int shuff
         printf("\n \n i=%d\n", i);
         root = insert(root, keys[i], keys[i]);
         int prev = debug_flag;
+        // debug_flag = 1;
+        traverse(root, 0, 0);
+        debug_flag = prev;
+        printf("\n\n");
+        char *got = get(root, keys[i]);
+        printf("\n[after insert]keys[i]: %s got : %s\n", keys[i], got);
+        assert(got == keys[i]);
+    }
+
+    for (int i = 0; i < num; i++)
+    {
+
+        int prev = debug_flag;
         debug_flag = 1;
         traverse(root, 0, 0);
         debug_flag = prev;
         printf("\n\n");
         char *got = get(root, keys[i]);
-        printf("\nkeys[i]: %s got : %s\n", keys[i], got);
+        printf("\n[full check] keys[i]: %s got: %s l=%d u=%d\n", keys[i], got, lower, upper);
         assert(got == keys[i]);
     }
     return root;
@@ -439,6 +454,8 @@ int main()
     debug("max=%d min=%d\n", MAX(2, 3), MIN(2, 3));
 
     tests();
+    // debug_flag = 1;
+    // test_tree(6);
     return 0;
     printf("\n\n\n\n\n\n\n\n\n");
 
