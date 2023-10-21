@@ -398,12 +398,15 @@ struct Node *insert_data_ints(struct Node *root, int lower, int upper, int shuff
 
     for (int i = 0; i < num; i++)
     {
-        debug("\ni=%d", i);
+        printf("\n \n i=%d\n", i);
         root = insert(root, keys[i], keys[i]);
+        int prev = debug_flag;
+        debug_flag = 1;
         traverse(root, 0, 0);
-        debug("\n");
+        debug_flag = prev;
+        printf("\n\n");
         char *got = get(root, keys[i]);
-        debug("\nkeys[i]: %s got : %s\n", keys[i], got);
+        printf("\nkeys[i]: %s got : %s\n", keys[i], got);
         assert(got == keys[i]);
     }
     return root;
