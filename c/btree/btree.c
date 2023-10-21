@@ -73,9 +73,6 @@ struct Item *create_item(char *key, char *value)
         exit(1);
     }
 
-    // newNode->children = (struct Node *)malloc(2 * T * sizeof(struct Node));
-    // newNode->items = (struct Item *)malloc(2 * T * sizeof(struct Item));
-    // newNode->leaf = leaf;
     newItem->key = key;
     newItem->value = value;
     return newItem;
