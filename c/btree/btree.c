@@ -2,6 +2,7 @@
 #include <signal.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <stdarg.h>
 
 #define T 2
 #define MAX(a, b) ((a > b) ? a : b)
@@ -9,13 +10,25 @@
 
 void segfault_handler(int signal_num)
 {
-    printf("Caught segmentation fault! Exiting...\n");
+    debug("Caught segmentation fault! Exiting...\n");
     exit(1);
 }
 
 int max(int a, int b)
 {
     return (a > b) ? a : b;
+}
+
+int debug_flag = 0;
+void debug(const char *format, ...)
+{
+    if (debug_flag)
+    {
+        va_list args;
+        va_start(args, format);
+        vprintf(format, args);
+        va_end(args);
+    }
 }
 
 struct Item
@@ -38,7 +51,7 @@ struct Node *create_node(int leaf)
     if (newNode == NULL)
     {
         // Handle memory allocation failure
-        printf("HERE!\n");
+        debug("HERE!\n");
         exit(1);
     }
 
@@ -55,7 +68,7 @@ struct Item *create_item(char *key, char *value)
     if (newItem == NULL)
     {
         // Handle memory allocation failure
-        printf("HERE!\n");
+        debug("HERE!\n");
         exit(1);
     }
 
@@ -69,28 +82,28 @@ struct Item *create_item(char *key, char *value)
 
 void print_items(struct Item **items, int length)
 {
-    // printf("len=(%d) >>", length);
+    // debug("len=(%d) >>", length);
     for (int i = 0; i < length; i++)
     {
-        printf(" [%s]", items[i]->key);
+        debug(" [%s]", items[i]->key);
     }
-    // printf("\n");
+    // debug("\n");
 }
 
 int traverse(struct Node *node, int level, int index)
 {
-    printf("\n");
+    debug("\n");
     for (int i = 0; i < level; i++)
     {
-        printf("\t");
+        debug("\t");
     }
-    printf("t(%d,%d)", level, index);
+    debug("t(%d,%d)", level, index);
     if (node == NULL)
     {
-        printf(" [NULL]");
+        debug(" [NULL]");
         return 0;
     }
-    printf("(%d)|", node->length);
+    debug("(%d)|", node->length);
     int count = node->length;
     print_items(node->items, node->length);
     if (node->leaf)
@@ -110,13 +123,13 @@ void items_insert(struct Item **items, int *length, struct Item *item)
 {
     if (item == NULL)
     {
-        printf("items_insert item is NULL\n");
+        debug("items_insert item is NULL\n");
         return;
     }
 
     // Increase the length of the array
 
-    // printf("length %d\n", *length);
+    // debug("length %d\n", *length);
 
     // items[(*length) - 1] = create_item(key, value);
     // return;
@@ -167,29 +180,29 @@ void split_child(struct Node *node, int index)
 
     struct Node *split = node->children[index];
     int split_length = split->length;
-    printf("\n");
-    printf(">>>>>>>>>>>>>>>\n");
-    printf(">>>>>>>>>>>>>>>\n");
-    printf(">>>>>>>>>>>>>>> leaf %d\n", node->leaf);
-    printf(">>>>>>>>>>>>>>> length %d\n", node->length);
-    printf("\n");
-    printf("---------------SPLIT-TRAVERSE-1---------------\n");
-    printf("traverse node:\n");
+    debug("\n");
+    debug(">>>>>>>>>>>>>>>\n");
+    debug(">>>>>>>>>>>>>>>\n");
+    debug(">>>>>>>>>>>>>>> leaf %d\n", node->leaf);
+    debug(">>>>>>>>>>>>>>> length %d\n", node->length);
+    debug("\n");
+    debug("---------------SPLIT-TRAVERSE-1---------------\n");
+    debug("traverse node:\n");
     traverse(node, 0, 0);
 
-    printf("\n\ntraverse split:\n");
+    debug("\n\ntraverse split:\n");
     traverse(split, 0, 0);
 
-    printf("\n");
-    printf("\n 1 split items: leaf=%d len=%d\n", split->leaf, split->length);
+    debug("\n");
+    debug("\n 1 split items: leaf=%d len=%d\n", split->leaf, split->length);
     print_items(split->items, split->length);
-    printf("\n");
-    printf("\n 1 node items: leaf=%d len=%d\n", node->leaf, node->length);
+    debug("\n");
+    debug("\n 1 node items: leaf=%d len=%d\n", node->leaf, node->length);
     print_items(node->items, node->length);
-    printf("\n");
-    printf("\n");
+    debug("\n");
+    debug("\n");
 
-    printf("split_child index = %d length = %d key = %s\n", index, split->length, split->items[T - 1]->key);
+    debug("split_child index = %d length = %d key = %s\n", index, split->length, split->items[T - 1]->key);
     struct Node *neighbor = create_node(split->leaf);
 
     for (int i = index + 1; i < 2 * T - 1; i++)
@@ -205,11 +218,11 @@ void split_child(struct Node *node, int index)
         neighbor->items[i] = split->items[T + i];
         if (neighbor->items[i] != NULL)
         {
-            printf("neighbor key: %s\n", neighbor->items[i]->key);
+            debug("neighbor key: %s\n", neighbor->items[i]->key);
         }
         // items_insert(neighbor->items, &neighbor->length, split->items[T + i]);
     }
-    printf("split_length: %d...%d\n", split_length, MAX(split_length - T, 0));
+    debug("split_length: %d...%d\n", split_length, MAX(split_length - T, 0));
     neighbor->length = MAX(split_length - T, 0);
     for (int i = 0; i < T - 1; i++)
     {
@@ -220,7 +233,7 @@ void split_child(struct Node *node, int index)
     // node->length++;
     if (split->leaf == 0)
     {
-        printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!child is leaf: %d\n", split->leaf);
+        debug("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!child is leaf: %d\n", split->leaf);
         for (int i = 0; i < T; i++)
         {
             neighbor->children[i] = split->children[T + i];
@@ -231,21 +244,21 @@ void split_child(struct Node *node, int index)
         }
     }
 
-    printf("\n 2 split items: leaf=%d len=%d\n", split->leaf, split->length);
+    debug("\n 2 split items: leaf=%d len=%d\n", split->leaf, split->length);
     print_items(split->items, split->length);
-    printf("\n");
-    printf("\n 2 neighbor items: leaf=%d len=%d\n", neighbor->leaf, neighbor->length);
+    debug("\n");
+    debug("\n 2 neighbor items: leaf=%d len=%d\n", neighbor->leaf, neighbor->length);
     print_items(neighbor->items, neighbor->length);
-    printf("\n");
-    printf("\n 2 node items: leaf=%d len=%d\n", node->leaf, node->length);
+    debug("\n");
+    debug("\n 2 node items: leaf=%d len=%d\n", node->leaf, node->length);
     print_items(node->items, node->length);
 
-    printf("\n\n---------------SPLIT-TRAVERSE-2---------------\n");
+    debug("\n\n---------------SPLIT-TRAVERSE-2---------------\n");
     traverse(node, 0, 0);
-    // printf("don.\n");
-    printf("\n<<<<<<<<<<<<<<<<\n");
-    printf("<<<<<<<<<<<<<<<<\n");
-    printf("\n");
+    // debug("don.\n");
+    debug("\n<<<<<<<<<<<<<<<<\n");
+    debug("<<<<<<<<<<<<<<<<\n");
+    debug("\n");
 }
 
 char *get(struct Node *node, char key[])
@@ -264,11 +277,11 @@ char *get(struct Node *node, char key[])
         }
         else if (comp < 0)
         {
-            printf("get %d\n", i);
+            debug("get %d\n", i);
             return get(node->children[i], key);
         }
     }
-    printf("get %d\n", node->length);
+    debug("get %d\n", node->length);
     return get(node->children[node->length], key);
 }
 
@@ -277,12 +290,12 @@ void insert_non_full(struct Node *node, char key[], char value[])
 
     if (node->leaf)
     {
-        printf("LEAF! len: %d key=%s\n", node->length, key);
+        debug("LEAF! len: %d key=%s\n", node->length, key);
         items_insert_kv(node->items, &node->length, key, value);
     }
     else
     {
-        printf("NON-LEAF!\n");
+        debug("NON-LEAF!\n");
         int i = (node->length - 1);
         while (i >= 0 && strcmp(key, node->items[0]->key) < 0)
         {
@@ -291,36 +304,36 @@ void insert_non_full(struct Node *node, char key[], char value[])
         i++;
         if (node->children[i]->length == (2 * T) - 1)
         {
-            printf("insert_non_full split\n");
+            debug("insert_non_full split\n");
             split_child(node, i);
             if (strcmp(key, node->items[i]->key) < 0)
             {
                 i++;
             }
         }
-        printf("insert child: %d\n", i);
+        debug("insert child: %d\n", i);
         insert_non_full(node->children[i], key, value);
     }
 }
 
 struct Node *insert(struct Node *root, char key[], char value[])
 {
-    printf("----insert! %s\n", key);
+    debug("----insert! %s\n", key);
     if (root == NULL)
     {
-        printf("create root.\n");
+        debug("create root.\n");
         root = create_node(1);
     }
 
     if (root->length == T)
     {
-        printf("root full.\n");
+        debug("root full.\n");
         traverse(root, 0, 0);
         struct Node *temp = create_node(0);
         temp->children[0] = root;
         split_child(temp, 0);
         // temp->length = 1;
-        // printf("LENGTH AFTER: %d\n", temp->length);
+        // debug("LENGTH AFTER: %d\n", temp->length);
         // exit(1);
 
         insert_non_full(temp, key, value);
@@ -385,12 +398,12 @@ struct Node *insert_data_ints(struct Node *root, int lower, int upper, int shuff
 
     for (int i = 0; i < num; i++)
     {
-        printf("\ni=%d", i);
+        debug("\ni=%d", i);
         root = insert(root, keys[i], keys[i]);
         traverse(root, 0, 0);
-        printf("\n");
+        debug("\n");
         char *got = get(root, keys[i]);
-        printf("\nkeys[i]: %s got : %s\n", keys[i], got);
+        debug("\nkeys[i]: %s got : %s\n", keys[i], got);
         assert(got == keys[i]);
     }
     return root;
@@ -401,7 +414,7 @@ void test_tree(int num)
     struct Node *root = NULL;
     root = insert_data_ints(root, 0, num, 0);
     int count = traverse(root, 0, 0);
-    printf("\ntest count: %d num: %d\n", count, num);
+    debug("\ntest count: %d num: %d\n", count, num);
     assert(count == num);
 
     return;
@@ -420,7 +433,7 @@ int main()
     signal(SIGSEGV, segfault_handler);
     printf("started btree.\n");
 
-    printf("max=%d min=%d\n", MAX(2, 3), MIN(2, 3));
+    debug("max=%d min=%d\n", MAX(2, 3), MIN(2, 3));
 
     tests();
     return 0;
