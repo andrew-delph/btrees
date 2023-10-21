@@ -343,8 +343,8 @@ char **generate_keys(int lower, int upper, int shuffle)
             fprintf(stderr, "Memory allocation failed.\n");
             exit(1);
         }
-        snprintf(keys[i], 10, "%c", 'A' + id); // Convert integer to string
-        // snprintf(keys[i], 10, "%d", id); // Convert integer to string
+        // snprintf(keys[i], 10, "%c", 'A' + id); // Convert integer to string
+        snprintf(keys[i], 10, "%d", id); // Convert integer to string
     }
 
     if (shuffle)
@@ -371,7 +371,7 @@ struct Node *insert_data_ints(struct Node *root, int lower, int upper, int shuff
 void test_tree(int num)
 {
     struct Node *root = NULL;
-    root = insert_data_ints(root, 0, num, 0);
+    root = insert_data_ints(root, 0, num, 1);
     int count = traverse(root, 0, 0);
     printf("\ntest count: %d\n", count);
     assert(count == num);
@@ -380,9 +380,9 @@ void test_tree(int num)
 }
 void tests()
 {
-    for (int i = 0; i < 100; i++)
+    for (int i = 0; i < 1000; i++)
     {
-        test_tree(i);
+        test_tree(9);
     }
     return;
 }
@@ -395,12 +395,12 @@ int main()
     printf("max=%d min=%d\n", MAX(2, 3), MIN(2, 3));
 
     tests();
-    // return 0;
 
     int count;
     struct Node *root = NULL;
 
-    root = insert_data_ints(root, 0, 13, 0);
+    int num = 9;
+    root = insert_data_ints(root, 0, num, 0);
 
     printf("\n\n---------------TRAVERSE---------------\n");
     count = traverse(root, 0, 0);
@@ -412,9 +412,9 @@ int main()
     root = insert(root, "Z", "x");
     printf("\n\n---------------TRAVERSE---------------\n");
     count = traverse(root, 0, 0);
-    printf("\ncount: %d", count);
+    printf("\ncount: %d\n", count);
 
-    assert(count == 14);
+    assert(count == ++num);
 
     // assert(num == size);
     printf("\nDONE.\n");
