@@ -4,7 +4,7 @@
 #include <assert.h>
 #include <stdarg.h>
 
-#define T 100
+#define T 1000
 #define MAX(a, b) ((a > b) ? a : b)
 #define MIN(a, b) ((a < b) ? a : b)
 
