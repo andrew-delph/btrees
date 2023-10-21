@@ -207,11 +207,6 @@ void split_child(struct Node *node, int index)
     node->children[index + 1] = neighbor;
     items_insert(node->items, &node->length, split->items[T - 1]);
 
-    for (int i = T - 1; i >= 0; i--)
-    {
-        neighbor->items[i] = split->items[T + i];
-    }
-
     int neighbor_length = MAX(split->length - T, 0);
     int split_length = MIN(split->length, T - 1);
     neighbor->length = neighbor_length;
@@ -220,17 +215,11 @@ void split_child(struct Node *node, int index)
     for (int i = T - 1; i >= 0; i--)
     {
         split->items[i] = split->items[i];
-    }
-    if (split->leaf == 0)
-    {
-        for (int i = 0; i < T; i++)
+        neighbor->items[i] = split->items[T + i];
+        if (split->leaf == 0)
         {
             neighbor->children[i] = split->children[T + i];
         }
-        // for (int i = 0; i < T; i++)
-        // {
-        //     split->children[i] = split->children[i];
-        // }
     }
 }
 
@@ -240,7 +229,6 @@ char *get_value(struct Node *node, char key[])
     {
         return NULL;
     }
-
     int index = items_search(node->items, node->length, key);
     if (index >= node->length)
     {
@@ -256,7 +244,6 @@ char *get_value(struct Node *node, char key[])
 
 void insert_non_full(struct Node *node, char key[], char value[])
 {
-
     if (node->leaf)
     {
         items_insert_kv(node->items, &node->length, key, value);
@@ -443,7 +430,7 @@ int main()
 
     // test();
 
-    test_tree(10000000);
+    test_tree(1000000);
     printf("done\n");
     return 0;
 }
