@@ -83,9 +83,16 @@ struct Item *create_item(char *key, char *value)
 void print_items(struct Item **items, int length)
 {
     // debug("len=(%d) >>", length);
-    for (int i = 0; i < length; i++)
+    for (int i = 0; i < 2 * T; i++)
     {
-        debug(" [%s]", items[i]->key);
+        if (items[i] != NULL)
+        {
+            debug("[%s] ", items[i]->key);
+        }
+        else
+        {
+            debug("[%s]", "N");
+        }
     }
     // debug("\n");
 }
@@ -103,7 +110,7 @@ int traverse(struct Node *node, int level, int index)
         debug(" [NULL]");
         return 0;
     }
-    debug("(%d)|", node->length);
+    debug("(%d)| ", node->length);
     int count = node->length;
     print_items(node->items, node->length);
     if (node->leaf)
@@ -213,7 +220,8 @@ void split_child(struct Node *node, int index)
     node->children[index + 1] = neighbor;
     items_insert(node->items, &node->length, split->items[T - 1]);
 
-    for (int i = 0; i < T - 1; i++)
+    // for (int i = 0; i < T - 1; i++)
+    for (int i = T - 2; i >= 0; i--)
     {
         neighbor->items[i] = split->items[T + i];
         if (neighbor->items[i] != NULL)
@@ -419,6 +427,9 @@ struct Node *insert_data_ints(struct Node *root, int lower, int upper, int shuff
             if (got_value != check_key)
             {
                 printf("\n[full check] keys[j]: %s got: %s j=%d i=%d\n", check_key, got_value, j, i);
+                debug_flag = 1;
+                get(root, check_key);
+                debug_flag = prev;
             }
             assert(got_value == check_key);
         }
