@@ -9,21 +9,10 @@
 #define T 1000
 #define MAX(a, b) ((a > b) ? a : b)
 #define MIN(a, b) ((a < b) ? a : b)
-int debug_flag = 1;
-void log_debug(const char *format, ...)
-{
-    if (debug_flag)
-    {
-        va_list args;
-        va_start(args, format);
-        vprintf(format, args);
-        va_end(args);
-    }
-}
 
 void segfault_handler(int signal_num)
 {
-    log_debug("Caught segmentation fault! Exiting...\n");
+    printf("Caught segmentation fault! Exiting...\n");
     exit(1);
 }
 
@@ -52,12 +41,10 @@ struct Node *create_node(int leaf)
     if (newNode == NULL)
     {
         // Handle memory allocation failure
-        log_debug("HERE!\n");
+        printf("HERE!\n");
         exit(1);
     }
 
-    // newNode->children = (struct Node *)malloc(2 * T * sizeof(struct Node));
-    // newNode->items = (struct Item *)malloc(2 * T * sizeof(struct Item));
     newNode->leaf = leaf;
     newNode->length = 0;
     return newNode;
@@ -69,7 +56,7 @@ struct Item *create_item(char *key, char *value)
     if (newItem == NULL)
     {
         // Handle memory allocation failure
-        log_debug("HERE!\n");
+        printf("HERE!\n");
         exit(1);
     }
 
@@ -82,25 +69,25 @@ void print_items(struct Item **items, int length)
 {
     for (int i = 0; i < length; i++)
     {
-        log_debug("[%s] ", items[i]->key);
+        printf("[%s] ", items[i]->key);
     }
-    // log_debug("\n");
+    // printf("\n");
 }
 
 int traverse(struct Node *node, int level, int index)
 {
-    // log_debug("\n");
+    // printf("\n");
     // for (int i = 0; i < level; i++)
     // {
-    //     log_debug("\t");
+    //     printf("\t");
     // }
-    // log_debug("t(%d,%d)", level, index);
+    // printf("t(%d,%d)", level, index);
     if (node == NULL)
     {
-        // log_debug(" [NULL]");
+        // printf(" [NULL]");
         return 0;
     }
-    // log_debug("(%d)| ", node->length);
+    // printf("(%d)| ", node->length);
     int count = node->length;
     // print_items(node->items, node->length);
     if (node->leaf)
@@ -132,7 +119,7 @@ int items_search(struct Item **items, int length, char *key)
         int mid = left + (right - left) / 2;
 
         int comp = strcmp(key, items[mid]->key);
-        // log_debug("mid %d comp %d k1 %s k2 %s\n", mid, comp, key, items[mid]->key);
+        // printf("mid %d comp %d k1 %s k2 %s\n", mid, comp, key, items[mid]->key);
         if (comp == 0)
         {
             return mid;
@@ -402,9 +389,7 @@ void test_items()
     items_insert_kv(items, &length, "2", "x");
     items_insert_kv(items, &length, "3", "x");
 
-    debug_flag = 1;
     print_items(items, length);
-    debug_flag = 0;
 
     printf("\n");
 
@@ -418,7 +403,6 @@ void test_items()
 
 void test()
 {
-    // debug_flag = 1;
     test_items();
     test_trees();
     printf("\nDONE TESTS.\n");
@@ -429,11 +413,11 @@ int main()
     signal(SIGSEGV, segfault_handler);
     printf("started btree.\n");
 
-    log_debug("max=%d min=%d\n", MAX(2, 3), MIN(2, 3));
+    printf("max=%d min=%d\n", MAX(2, 3), MIN(2, 3));
 
-    // test();
+    test();
 
-    test_tree(10000000);
+    // test_tree(10000000);
     printf("done\n");
     return 0;
 }

@@ -199,7 +199,6 @@ int main()
     for (int i = 0; i < num; i++)
     {
         assert(search(i, &ch, root));
-        // printf("\ni %d ch %d\n", i, ch);
     }
 
     end_time = clock();
