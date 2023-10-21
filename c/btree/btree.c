@@ -79,7 +79,6 @@ void print_items(struct Item **items, int length)
 
 int traverse(struct Node *node, int level, int index)
 {
-
     printf("\n");
     for (int i = 0; i < level; i++)
     {
@@ -249,6 +248,30 @@ void split_child(struct Node *node, int index)
     printf("\n");
 }
 
+char *get(struct Node *node, char key[])
+{
+    if (node == NULL)
+    {
+        return NULL;
+    }
+    for (int i = 0; i < node->length; i++)
+    {
+
+        int comp = strcmp(key, node->items[i]->key);
+        if (comp == 0)
+        {
+            return node->items[i]->value;
+        }
+        else if (comp < 0)
+        {
+            printf("get %d\n", i);
+            return get(node->children[i], key);
+        }
+    }
+    printf("get %d\n", node->length);
+    return get(node->children[node->length], key);
+}
+
 void insert_non_full(struct Node *node, char key[], char value[])
 {
 
@@ -363,7 +386,12 @@ struct Node *insert_data_ints(struct Node *root, int lower, int upper, int shuff
     for (int i = 0; i < num; i++)
     {
         printf("\ni=%d", i);
-        root = insert(root, keys[i], "x");
+        root = insert(root, keys[i], keys[i]);
+        traverse(root, 0, 0);
+        printf("\n");
+        char *got = get(root, keys[i]);
+        printf("\nkeys[i]: %s got : %s\n", keys[i], got);
+        assert(got == keys[i]);
     }
     return root;
 }
@@ -371,18 +399,18 @@ struct Node *insert_data_ints(struct Node *root, int lower, int upper, int shuff
 void test_tree(int num)
 {
     struct Node *root = NULL;
-    root = insert_data_ints(root, 0, num, 1);
+    root = insert_data_ints(root, 0, num, 0);
     int count = traverse(root, 0, 0);
-    printf("\ntest count: %d\n", count);
+    printf("\ntest count: %d num: %d\n", count, num);
     assert(count == num);
 
     return;
 }
 void tests()
 {
-    for (int i = 0; i < 1000; i++)
+    for (int i = 0; i < 36; i++)
     {
-        test_tree(9);
+        test_tree(i);
     }
     return;
 }
@@ -395,24 +423,29 @@ int main()
     printf("max=%d min=%d\n", MAX(2, 3), MIN(2, 3));
 
     tests();
+    return 0;
+    printf("\n\n\n\n\n\n\n\n\n");
 
     int count;
     struct Node *root = NULL;
 
-    int num = 9;
+    int num = 6;
     root = insert_data_ints(root, 0, num, 0);
 
     printf("\n\n---------------TRAVERSE---------------\n");
     count = traverse(root, 0, 0);
     printf("\ncount: %d", count);
-    printf("\n\n");
+    printf("\nFIRST\n");
+
+    assert(count == num);
+    return 0;
 
     printf("---BAD-INSERT------------------------------------------------------------------------------------\n");
 
-    root = insert(root, "Z", "x");
+    root = insert(root, "36", "x");
     printf("\n\n---------------TRAVERSE---------------\n");
     count = traverse(root, 0, 0);
-    printf("\ncount: %d\n", count);
+    printf("\nSECOND. count: %d\n", count);
 
     assert(count == ++num);
 
