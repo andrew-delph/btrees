@@ -197,7 +197,6 @@ void split_child(struct Node *node, int index)
 {
 
     struct Node *split = node->children[index];
-    int split_length = split->length;
     debug("\n");
     debug(">>>>>>>>>>>>>>> leaf %d\n", node->leaf);
     debug(">>>>>>>>>>>>>>> length %d\n", node->length);
@@ -241,15 +240,18 @@ void split_child(struct Node *node, int index)
         }
         // items_insert(neighbor->items, &neighbor->length, split->items[T + i]);
     }
-    debug("split_length: %d...%d\n", split_length, MAX(split_length - T, 0));
-    neighbor->length = MAX(split_length - T, 0);
-    //  neighbor->length = MIN(split_length, T - 1);
+
+    int neighbor_length = MAX(split->length - T, 0);
+    int split_length = MIN(split->length, T - 1);
+    neighbor->length = neighbor_length;
+    split->length = split_length;
+
+    debug("split_length: %d neighbor_length: %d\n", split_length, neighbor_length);
     for (int i = 0; i < T - 1; i++)
     {
         split->items[i] = split->items[i];
         // items_insert(split->items, &split->length, split->items[T + i]);
     }
-    split->length = MIN(split_length, T - 1);
     // node->length++;
     if (split->leaf == 0)
     {
@@ -274,11 +276,11 @@ void split_child(struct Node *node, int index)
     print_items(node->items, node->length);
 
     debug("\n\n---------------SPLIT-TRAVERSE-2---------------\n");
-    printf("node\n");
+    printf("node:\n");
     traverse(node, 0, 0);
-    printf("\nsplit\n");
+    printf("\nsplit:\n");
     traverse(split, 0, 0);
-    printf("\n neighbor\n");
+    printf("\n neighbor:\n");
     traverse(neighbor, 0, 0);
     // debug("don.\n");
     debug("\n<<<<<<<<<<<<<<<<\n");
