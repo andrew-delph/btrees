@@ -274,7 +274,12 @@ void split_child(struct Node *node, int index)
     print_items(node->items, node->length);
 
     debug("\n\n---------------SPLIT-TRAVERSE-2---------------\n");
+    printf("node\n");
     traverse(node, 0, 0);
+    printf("\nsplit\n");
+    traverse(split, 0, 0);
+    printf("\n neighbor\n");
+    traverse(neighbor, 0, 0);
     // debug("don.\n");
     debug("\n<<<<<<<<<<<<<<<<\n");
     debug("<<<<<<<<<<<<<<<<\n");
