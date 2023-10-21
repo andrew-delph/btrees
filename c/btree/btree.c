@@ -217,7 +217,7 @@ void split_child(struct Node *node, int index)
     debug("\n");
     debug("\n");
 
-    debug("split_child index = %d length = %d key = %s\n", index, split->length, split->items[T - 1]->key);
+    debug("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!split_child index = %d length = %d key = %s\n", index, split->length, split->items[T - 1]->key);
     struct Node *neighbor = create_node(split->leaf);
 
     // for (int i = index + 1; i < 2 * T - 1; i++)
@@ -231,8 +231,9 @@ void split_child(struct Node *node, int index)
     items_insert(node->items, &node->length, split->items[T - 1]);
 
     // for (int i = 0; i < T - 1; i++)
-    for (int i = T - 2; i >= 0; i--)
+    for (int i = T - 1; i >= 0; i--)
     {
+        // printf("?????????????????????????? %s\n", split->items[T + i]->key);
         neighbor->items[i] = split->items[T + i];
         if (neighbor->items[i] != NULL)
         {
@@ -247,7 +248,7 @@ void split_child(struct Node *node, int index)
     split->length = split_length;
 
     debug("split_length: %d neighbor_length: %d\n", split_length, neighbor_length);
-    for (int i = 0; i < T - 1; i++)
+    for (int i = T - 1; i >= 0; i--)
     {
         split->items[i] = split->items[i];
         // items_insert(split->items, &split->length, split->items[T + i]);
@@ -331,12 +332,13 @@ void insert_non_full(struct Node *node, char key[], char value[])
         i++;
         if (node->children[i]->length == (2 * T) - 1)
         {
-            debug("insert_non_full split\n");
+            debug("insert_non_full split LEN: %d\n", node->children[i]->length);
             split_child(node, i);
             int comp = strcmp(key, node->items[i]->key);
             // printf("CHECKING %s comp %d\n", node->items[i]->key, comp);
             if (strcmp(key, node->items[i]->key) > 0)
             {
+                printf("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX!!!!!!!!!!!!!!!!!!!!! i++\n");
                 i++;
             }
         }
@@ -354,7 +356,7 @@ struct Node *insert(struct Node *root, char key[], char value[])
         root = create_node(1);
     }
 
-    if (root->length == T)
+    if (root->length == 2 * T - 1)
     {
         debug("root full.\n");
         traverse(root, 0, 0);

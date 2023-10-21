@@ -61,9 +61,9 @@ class BTree:
 
     # Print the tree
     def print_tree(self, x, l=0):
-        print("Level ", l, " ", len(x.keys), end=":")
+        print("Level ", l, " ", len(x.keys), end=": ")
         for i in x.keys:
-            print(i, end=" ")
+            print(i[0], end=", ")
         print()
         l += 1
         if len(x.child) > 0:
@@ -72,12 +72,19 @@ class BTree:
 
 
 def main():
-    B = BTree(3)
+    B = BTree(2)
 
-    for i in range(100):
+    for i in range(6):
         B.insert((i, ))
 
+    print()
     B.print_tree(B.root)
+    print()
+    print("INSERTING NEXT NODE!")
+    print()
+    B.insert((6, ))
+    B.print_tree(B.root)
+    print()
 
 
 if __name__ == '__main__':
