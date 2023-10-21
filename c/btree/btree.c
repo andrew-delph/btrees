@@ -4,7 +4,7 @@
 #include <assert.h>
 #include <stdarg.h>
 
-#define T 2
+#define T 3
 #define MAX(a, b) ((a > b) ? a : b)
 #define MIN(a, b) ((a < b) ? a : b)
 
@@ -180,6 +180,34 @@ void items_insert(struct Item **items, int *length, struct Item *item)
     }
 
     items[index] = item;
+}
+
+int items_search(struct Item **items, int length, char *key)
+{
+    int left = 0;
+    int right = length - 1;
+
+    debug("left: %d right: %d\n", left, right);
+
+    while (left <= right)
+    {
+
+        int mid = left + (right - left) / 2;
+        int comp = strcmp(key, items[mid]->key);
+        debug("mid %d comp %d k1 %s k2 %s\n", mid, comp, key, items[mid]->key);
+        if (comp == 0)
+        {
+            return mid;
+        }
+        else if (comp > 0)
+        {
+            left = mid + 1;
+        }
+        else
+        {
+            right = mid - 1;
+        }
+    }
 }
 
 void items_insert_kv(struct Item **items, int *length, char *key, char *value)
@@ -479,14 +507,44 @@ void test_tree(int num)
 
     return;
 }
-void tests()
+void test_trees()
 {
     for (int i = 1000; i < 1100; i++)
     {
         test_tree(i);
     }
-    printf("\nDONE TESTS.\n");
+
     return;
+}
+
+void test_items()
+{
+    printf("test_items.\n");
+    struct Item *items[2 * T];
+    int length = 0;
+    items_insert_kv(items, &length, "1", "x");
+    items_insert_kv(items, &length, "2", "x");
+    items_insert_kv(items, &length, "3", "x");
+
+    debug_flag = 1;
+    print_items(items, length);
+    debug_flag = 0;
+
+    printf("\n");
+
+    printf("A: %d\n", items_search(items, length, "1"));
+    printf("b: %d\n", items_search(items, length, "2"));
+    printf("c: %d\n", items_search(items, length, "3"));
+    printf("0: %d\n", items_search(items, length, "0"));
+    printf("4: %d\n", items_search(items, length, "4"));
+    printf("length %d\n", length);
+}
+
+void test()
+{
+    // debug_flag = 1;
+    test_items();
+    printf("\nDONE TESTS.\n");
 }
 
 int main()
@@ -496,9 +554,11 @@ int main()
 
     debug("max=%d min=%d\n", MAX(2, 3), MIN(2, 3));
 
-    tests();
-    // debug_flag = 1;
-    // test_tree(6);
+    test();
+
+    // test_tree();
+    // test_tree(10000);
+    printf("done\n");
     return 0;
     printf("\n\n\n\n\n\n\n\n\n");
 
