@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <signal.h>
 #include <stdlib.h>
+#include <string.h>
 #include <assert.h>
 #include <stdarg.h>
 #include <time.h>
@@ -8,20 +9,8 @@
 #define T 1000
 #define MAX(a, b) ((a > b) ? a : b)
 #define MIN(a, b) ((a < b) ? a : b)
-
-void segfault_handler(int signal_num)
-{
-    debug("Caught segmentation fault! Exiting...\n");
-    exit(1);
-}
-
-int max(int a, int b)
-{
-    return (a > b) ? a : b;
-}
-
 int debug_flag = 1;
-void debug(const char *format, ...)
+void log_debug(const char *format, ...)
 {
     if (debug_flag)
     {
@@ -30,6 +19,17 @@ void debug(const char *format, ...)
         vprintf(format, args);
         va_end(args);
     }
+}
+
+void segfault_handler(int signal_num)
+{
+    log_debug("Caught segmentation fault! Exiting...\n");
+    exit(1);
+}
+
+int max(int a, int b)
+{
+    return (a > b) ? a : b;
 }
 
 struct Item
@@ -52,7 +52,7 @@ struct Node *create_node(int leaf)
     if (newNode == NULL)
     {
         // Handle memory allocation failure
-        debug("HERE!\n");
+        log_debug("HERE!\n");
         exit(1);
     }
 
@@ -69,7 +69,7 @@ struct Item *create_item(char *key, char *value)
     if (newItem == NULL)
     {
         // Handle memory allocation failure
-        debug("HERE!\n");
+        log_debug("HERE!\n");
         exit(1);
     }
 
@@ -85,25 +85,25 @@ void print_items(struct Item **items, int length)
 {
     for (int i = 0; i < length; i++)
     {
-        debug("[%s] ", items[i]->key);
+        log_debug("[%s] ", items[i]->key);
     }
-    // debug("\n");
+    // log_debug("\n");
 }
 
 int traverse(struct Node *node, int level, int index)
 {
-    // debug("\n");
+    // log_debug("\n");
     // for (int i = 0; i < level; i++)
     // {
-    //     debug("\t");
+    //     log_debug("\t");
     // }
-    // debug("t(%d,%d)", level, index);
+    // log_debug("t(%d,%d)", level, index);
     if (node == NULL)
     {
-        // debug(" [NULL]");
+        // log_debug(" [NULL]");
         return 0;
     }
-    // debug("(%d)| ", node->length);
+    // log_debug("(%d)| ", node->length);
     int count = node->length;
     // print_items(node->items, node->length);
     if (node->leaf)
@@ -130,14 +130,12 @@ int items_search(struct Item **items, int length, char *key)
     int left = 0;
     int right = length - 1;
 
-    // debug("left: %d right: %d\n", left, right);
-
     while (left <= right)
     {
-
         int mid = left + (right - left) / 2;
+
         int comp = strcmp(key, items[mid]->key);
-        // debug("mid %d comp %d k1 %s k2 %s\n", mid, comp, key, items[mid]->key);
+        // log_debug("mid %d comp %d k1 %s k2 %s\n", mid, comp, key, items[mid]->key);
         if (comp == 0)
         {
             return mid;
@@ -186,20 +184,11 @@ void items_insert_kv(struct Item **items, int *length, char *key, char *value)
     items_insert(items, length, create_item(key, value));
 }
 
-// Function to get_value the length of the Items structure
-int items_length(const struct Node *node)
-{
-    return node->length;
-}
-
 void split_child(struct Node *node, int index)
 {
-
     struct Node *split = node->children[index];
-
     struct Node *neighbor = create_node(split->leaf);
 
-    // for (int i = index + 1; i < 2 * T - 1; i++)
     for (int i = 2 * T - 2; i > index; i--)
     {
         node->children[i + 1] = node->children[i];
@@ -228,10 +217,10 @@ void split_child(struct Node *node, int index)
         {
             neighbor->children[i] = split->children[T + i];
         }
-        for (int i = 0; i < T; i++)
-        {
-            split->children[i] = split->children[i];
-        }
+        // for (int i = 0; i < T; i++)
+        // {
+        //     split->children[i] = split->children[i];
+        // }
     }
 }
 
@@ -440,11 +429,11 @@ int main()
     signal(SIGSEGV, segfault_handler);
     printf("started btree.\n");
 
-    debug("max=%d min=%d\n", MAX(2, 3), MIN(2, 3));
+    log_debug("max=%d min=%d\n", MAX(2, 3), MIN(2, 3));
 
     // test();
 
-    test_tree(10000000);
+    test_tree(2000000);
     printf("done\n");
     return 0;
 }
