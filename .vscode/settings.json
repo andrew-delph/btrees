@@ -17,6 +17,7 @@
     "chrono": "c",
     "algorithm": "c",
     "typeinfo": "c",
-    "stdio.h": "c"
+    "stdio.h": "c",
+    "assert.h": "c"
   }
 }

@@ -3,6 +3,7 @@
 // COMPARING RUN TIMES WITH IT.
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 
 #define MAX 3
 #define MIN 2
@@ -132,11 +133,11 @@ void insert(int val)
 }
 
 // Search node
-void search(int val, int *pos, struct BTreeNode *myNode)
+int search(int val, int *pos, struct BTreeNode *myNode)
 {
     if (!myNode)
     {
-        return;
+        return 0;
     }
 
     if (val < myNode->val[1])
@@ -150,13 +151,11 @@ void search(int val, int *pos, struct BTreeNode *myNode)
             ;
         if (val == myNode->val[*pos])
         {
-            printf("%d is found", val);
-            return;
+            // printf("%d is found", val);
+            return 1;
         }
     }
-    search(val, pos, myNode->link[*pos]);
-
-    return;
+    return search(val, pos, myNode->link[*pos]);
 }
 
 // Traverse then nodes
@@ -186,8 +185,8 @@ int main()
 
     for (int i = 0; i < 10000; i++)
     {
-        search(i, &ch, root);
-        printf("i %d ch %d", i, ch);
+        assert(search(i, &ch, root));
+        // printf("\ni %d ch %d\n", i, ch);
     }
 
     // insert(8);
