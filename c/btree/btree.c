@@ -191,29 +191,6 @@ void items_insert(struct Item **items, int *length, struct Item *item)
     }
 
     return;
-
-    // int i = (*length) - 1;
-    // while (i >= 0)
-    // {
-    //     int comp = strcmp(item->key, items[i]->key);
-    //     int found = comp > 0;
-    //     if (found)
-    //     {
-    //         break;
-    //     }
-    //     items[i + 1] = items[i];
-    //     // (*items[i + 1]).value = (*items[i]).value;
-    //     i--;
-    // }
-
-    // int index = i + 1;
-
-    // if (items[index] == NULL || items[index]->key != item->key)
-    // {
-    //     (*length)++;
-    // }
-
-    // items[index] = item;
 }
 
 void items_insert_kv(struct Item **items, int *length, char *key, char *value)
