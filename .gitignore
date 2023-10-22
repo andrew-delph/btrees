@@ -1,1 +1,5 @@
 bazel-*
+c/btree/perf.data.old
+c/btree/gmon.out
+c/btree/perf.data
+c/btree/gmon.out
