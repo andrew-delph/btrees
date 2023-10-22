@@ -35,8 +35,11 @@ struct Node
     struct Item *items[2 * T];
 };
 
+int nodes = 0;
+
 struct Node *create_node(int leaf)
 {
+    nodes++;
     struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
     if (newNode == NULL)
     {
@@ -430,7 +433,8 @@ int main()
 
     // test();
 
-    test_tree(1000000, 0);
+    test_tree(10000000, 0);
     printf("done.\n");
+    printf("nodes %d\n", nodes);
     return 0;
 }

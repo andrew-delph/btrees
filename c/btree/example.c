@@ -15,10 +15,11 @@ struct BTreeNode
 };
 
 struct BTreeNode *root;
-
+int nodes = 0;
 // Create a node
 struct BTreeNode *createNode(int val, struct BTreeNode *child)
 {
+    nodes++;
     struct BTreeNode *newNode;
     newNode = (struct BTreeNode *)malloc(sizeof(struct BTreeNode));
     newNode->val[1] = val;
@@ -208,5 +209,6 @@ int main()
 
     printf("Get time: %.2f seconds\n", elapsed_time);
 
+    printf("nodes %d\n", nodes);
     printf("done.");
 }
