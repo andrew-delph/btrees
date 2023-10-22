@@ -214,7 +214,7 @@ void split_child(struct Node *node, int index)
 
     for (int i = split_length; i >= 0; i--)
     {
-        split->items[i] = split->items[i];
+        // split->items[i] = split->items[i];
         neighbor->items[i] = split->items[T + i];
         if (split->leaf == 0)
         {
