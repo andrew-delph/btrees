@@ -260,7 +260,7 @@ void insert_non_full(struct Node *node, char key[], char value[])
         {
             split_child(node, i);
             int comp = strcmp(key, node->items[i]->key);
-            if (strcmp(key, node->items[i]->key) > 0)
+            if (comp > 0)
             {
                 i++;
             }

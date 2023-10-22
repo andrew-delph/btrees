@@ -18,6 +18,7 @@
     "algorithm": "c",
     "typeinfo": "c",
     "stdio.h": "c",
-    "assert.h": "c"
+    "assert.h": "c",
+    "cstring": "c"
   }
 }
