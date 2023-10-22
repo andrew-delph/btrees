@@ -199,7 +199,7 @@ void split_child(struct Node *node, int index)
     struct Node *split = node->children[index];
     struct Node *neighbor = create_node(split->leaf);
 
-    for (int i = 2 * T - 2; i > index; i--)
+    for (int i = node->length; i > index; i--)
     {
         node->children[i + 1] = node->children[i];
     }
@@ -373,10 +373,10 @@ struct Node *insert_data_ints(struct Node *root, int lower, int upper, int shuff
     return root;
 }
 
-void test_tree(int num)
+void test_tree(int num, int shuffle)
 {
     struct Node *root = NULL;
-    root = insert_data_ints(root, 0, num, 0);
+    root = insert_data_ints(root, 0, num, shuffle);
     // int count = count_nodes(root, 0, 0);
     // printf("\ntest count: %d num: %d", count, num);
     // assert(count == num);
@@ -387,7 +387,7 @@ void test_trees()
 {
     for (int i = 1000; i < 1100; i++)
     {
-        test_tree(i);
+        test_tree(i, 1);
     }
 
     return;
@@ -428,9 +428,9 @@ int main()
 
     printf("max=%d min=%d\n", MAX(T, T * 2), MIN(T, T * 2));
 
-    // test();
+    test();
 
-    test_tree(1000000);
+    test_tree(1000000, 0);
     printf("done\n");
     return 0;
 }
