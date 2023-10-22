@@ -426,7 +426,7 @@ int main()
     signal(SIGSEGV, segfault_handler);
     printf("started btree.\n");
 
-    printf("max=%d min=%d\n", MAX(2, 3), MIN(2, 3));
+    printf("max=%d min=%d\n", MAX(T, T * 2), MIN(T, T * 2));
 
     // test();
 
