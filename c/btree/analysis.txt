@@ -3,19 +3,18 @@ Flat profile:
 Each sample counts as 0.01 seconds.
   %   cumulative   self              self     total           
  time   seconds   seconds    calls   s/call   s/call  name    
- 87.23      2.42     2.42  1000909     0.00     0.00  items_insert
-  6.65      2.61     0.18  3000000     0.00     0.00  items_search
-  3.96      2.72     0.11  1000000     0.00     0.00  insert_non_full
-  0.72      2.74     0.02        1     0.02     0.02  generate_keys
-  0.36      2.75     0.01  1000000     0.00     0.00  get_value
-  0.36      2.76     0.01      909     0.00     0.00  split_child
-  0.36      2.77     0.01        1     0.01     2.77  insert_data_ints
-  0.36      2.78     0.01                             _init
-  0.00      2.78     0.00  1000000     0.00     0.00  create_item
-  0.00      2.78     0.00  1000000     0.00     0.00  insert
-  0.00      2.78     0.00  1000000     0.00     0.00  items_insert_kv
-  0.00      2.78     0.00      911     0.00     0.00  create_node
-  0.00      2.78     0.00        1     0.00     2.77  test_tree
+ 82.03      2.42     2.42  1000909     0.00     0.00  items_insert
+ 10.85      2.74     0.32  3000000     0.00     0.00  items_search
+  3.73      2.85     0.11  1000000     0.00     0.00  insert_non_full
+  1.02      2.88     0.03  1000000     0.00     0.00  get_value
+  1.02      2.91     0.03        1     0.03     0.03  generate_keys
+  0.68      2.93     0.02        1     0.02     2.95  insert_data_ints
+  0.34      2.94     0.01  1000000     0.00     0.00  items_insert_kv
+  0.34      2.95     0.01      909     0.00     0.00  split_child
+  0.00      2.95     0.00  1000000     0.00     0.00  create_item
+  0.00      2.95     0.00  1000000     0.00     0.00  insert
+  0.00      2.95     0.00      911     0.00     0.00  create_node
+  0.00      2.95     0.00        1     0.00     2.95  test_tree
 
  %         the percentage of the total running time of the
 time       program used by this function.
@@ -53,74 +52,71 @@ notice and this notice are preserved.
 		     Call graph (explanation follows)
 
 
-granularity: each sample hit covers 4 byte(s) for 0.36% of 2.78 seconds
+granularity: each sample hit covers 4 byte(s) for 0.34% of 2.95 seconds
 
 index % time    self  children    called     name
-                0.01    2.76       1/1           test_tree [2]
-[1]     99.6    0.01    2.76       1         insert_data_ints [1]
-                0.00    2.61 1000000/1000000     insert [4]
-                0.01    0.12 1000000/1000000     get_value [9]
-                0.02    0.00       1/1           generate_keys [10]
+                0.02    2.93       1/1           test_tree [2]
+[1]    100.0    0.02    2.93       1         insert_data_ints [1]
+                0.00    2.66 1000000/1000000     insert [4]
+                0.03    0.21 1000000/1000000     get_value [9]
+                0.03    0.00       1/1           generate_keys [10]
 -----------------------------------------------
-                0.00    2.77       1/1           main [3]
-[2]     99.6    0.00    2.77       1         test_tree [2]
-                0.01    2.76       1/1           insert_data_ints [1]
+                0.00    2.95       1/1           main [3]
+[2]    100.0    0.00    2.95       1         test_tree [2]
+                0.02    2.93       1/1           insert_data_ints [1]
 -----------------------------------------------
                                                  <spontaneous>
-[3]     99.6    0.00    2.77                 main [3]
-                0.00    2.77       1/1           test_tree [2]
+[3]    100.0    0.00    2.95                 main [3]
+                0.00    2.95       1/1           test_tree [2]
 -----------------------------------------------
-                0.00    2.61 1000000/1000000     insert_data_ints [1]
-[4]     93.8    0.00    2.61 1000000         insert [4]
-                0.11    2.50 1000000/1000000     insert_non_full [5]
+                0.00    2.66 1000000/1000000     insert_data_ints [1]
+[4]     90.1    0.00    2.66 1000000         insert [4]
+                0.11    2.55 1000000/1000000     insert_non_full [5]
                 0.00    0.00       1/909         split_child [11]
-                0.00    0.00       2/911         create_node [14]
+                0.00    0.00       2/911         create_node [13]
 -----------------------------------------------
                               998001             insert_non_full [5]
-                0.11    2.50 1000000/1000000     insert [4]
-[5]     93.8    0.11    2.50 1000000+998001  insert_non_full [5]
-                0.00    2.48 1000000/1000000     items_insert_kv [7]
+                0.11    2.55 1000000/1000000     insert [4]
+[5]     90.1    0.11    2.55 1000000+998001  insert_non_full [5]
+                0.01    2.52 1000000/1000000     items_insert_kv [6]
                 0.01    0.00     908/909         split_child [11]
                               998001             insert_non_full [5]
 -----------------------------------------------
+                0.01    2.52 1000000/1000000     insert_non_full [5]
+[6]     85.9    0.01    2.52 1000000         items_insert_kv [6]
+                2.42    0.11 1000000/1000909     items_insert [7]
+                0.00    0.00 1000000/1000000     create_item [12]
+-----------------------------------------------
                 0.00    0.00     909/1000909     split_child [11]
-                2.42    0.06 1000000/1000909     items_insert_kv [7]
-[6]     89.5    2.42    0.06 1000909         items_insert [6]
-                0.06    0.00 1000909/3000000     items_search [8]
+                2.42    0.11 1000000/1000909     items_insert_kv [6]
+[7]     85.7    2.42    0.11 1000909         items_insert [7]
+                0.11    0.00 1000909/3000000     items_search [8]
 -----------------------------------------------
-                0.00    2.48 1000000/1000000     insert_non_full [5]
-[7]     89.4    0.00    2.48 1000000         items_insert_kv [7]
-                2.42    0.06 1000000/1000909     items_insert [6]
-                0.00    0.00 1000000/1000000     create_item [13]
------------------------------------------------
-                0.06    0.00 1000909/3000000     items_insert [6]
-                0.12    0.00 1999091/3000000     get_value [9]
-[8]      6.7    0.18    0.00 3000000         items_search [8]
+                0.11    0.00 1000909/3000000     items_insert [7]
+                0.21    0.00 1999091/3000000     get_value [9]
+[8]     10.8    0.32    0.00 3000000         items_search [8]
 -----------------------------------------------
                               999091             get_value [9]
-                0.01    0.12 1000000/1000000     insert_data_ints [1]
-[9]      4.8    0.01    0.12 1000000+999091  get_value [9]
-                0.12    0.00 1999091/3000000     items_search [8]
+                0.03    0.21 1000000/1000000     insert_data_ints [1]
+[9]      8.2    0.03    0.21 1000000+999091  get_value [9]
+                0.21    0.00 1999091/3000000     items_search [8]
                               999091             get_value [9]
 -----------------------------------------------
-                0.02    0.00       1/1           insert_data_ints [1]
-[10]     0.7    0.02    0.00       1         generate_keys [10]
+                0.03    0.00       1/1           insert_data_ints [1]
+[10]     1.0    0.03    0.00       1         generate_keys [10]
 -----------------------------------------------
                 0.00    0.00       1/909         insert [4]
                 0.01    0.00     908/909         insert_non_full [5]
 [11]     0.4    0.01    0.00     909         split_child [11]
-                0.00    0.00     909/1000909     items_insert [6]
-                0.00    0.00     909/911         create_node [14]
+                0.00    0.00     909/1000909     items_insert [7]
+                0.00    0.00     909/911         create_node [13]
 -----------------------------------------------
-                                                 <spontaneous>
-[12]     0.4    0.01    0.00                 _init [12]
------------------------------------------------
-                0.00    0.00 1000000/1000000     items_insert_kv [7]
-[13]     0.0    0.00    0.00 1000000         create_item [13]
+                0.00    0.00 1000000/1000000     items_insert_kv [6]
+[12]     0.0    0.00    0.00 1000000         create_item [12]
 -----------------------------------------------
                 0.00    0.00       2/911         insert [4]
                 0.00    0.00     909/911         split_child [11]
-[14]     0.0    0.00    0.00     911         create_node [14]
+[13]     0.0    0.00    0.00     911         create_node [13]
 -----------------------------------------------
 
  This table describes the call tree of the program, and was sorted by
@@ -213,8 +209,7 @@ notice and this notice are preserved.
 
 Index by function name
 
-  [12] _init                   [4] insert                  [8] items_search
-  [13] create_item             [1] insert_data_ints       [11] split_child
-  [14] create_node             [5] insert_non_full         [2] test_tree
-  [10] generate_keys           [6] items_insert
-   [9] get_value               [7] items_insert_kv
+  [12] create_item             [4] insert                  [6] items_insert_kv
+  [13] create_node             [1] insert_data_ints        [8] items_search
+  [10] generate_keys           [5] insert_non_full        [11] split_child
+   [9] get_value               [7] items_insert            [2] test_tree

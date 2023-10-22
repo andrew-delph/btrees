@@ -428,7 +428,7 @@ int main()
 
     printf("max=%d min=%d\n", MAX(T, T * 2), MIN(T, T * 2));
 
-    test();
+    // test();
 
     test_tree(1000000, 0);
     printf("done\n");
