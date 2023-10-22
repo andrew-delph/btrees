@@ -212,7 +212,7 @@ void split_child(struct Node *node, int index)
     neighbor->length = neighbor_length;
     split->length = split_length;
 
-    for (int i = T - 1; i >= 0; i--)
+    for (int i = split_length; i >= 0; i--)
     {
         split->items[i] = split->items[i];
         neighbor->items[i] = split->items[T + i];
