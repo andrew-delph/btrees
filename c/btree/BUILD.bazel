@@ -9,3 +9,9 @@ cc_binary(
     srcs = ["btree.c"],
     deps = [":deps"],
 )
+
+cc_binary(
+    name = "example",
+    srcs = ["example.c"],
+    deps = [":deps"],
+)
