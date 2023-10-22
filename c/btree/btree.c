@@ -178,7 +178,7 @@ void items_insert(struct Item **items, int *length, struct Item *item)
     }
     else
     {
-        for (int i = 2 * T - 2; i >= index; i--)
+        for (int i = *length; i >= index; i--)
         {
             items[i + 1] = items[i];
         }
