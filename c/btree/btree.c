@@ -431,6 +431,6 @@ int main()
     // test();
 
     test_tree(1000000, 0);
-    printf("done.z\n");
+    printf("done.\n");
     return 0;
 }
